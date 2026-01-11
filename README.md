@@ -71,7 +71,7 @@
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/harilal-sah-kanu/Portfolio.git
+   git clone https://github.com/naitikshah1008/MyPortfolio.git
    cd Portfolio
    ```
 
