@@ -29,7 +29,7 @@ app.use(cors({
     "http://localhost:5173",
     "http://localhost:3001",
     "https://my-portfolio-khaki-eight-80.vercel.app",
-    "https://my-portfolio-lxwvi907g-naitik-shahs-projects-fbea1886.vercel.app",
+    "https://my-portfolio-naitik-shahs-projects-fbea1886.vercel.app/",
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
