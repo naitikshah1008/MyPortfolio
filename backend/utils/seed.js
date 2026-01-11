@@ -132,7 +132,7 @@ const seedData = async () => {
       },
       {
         name: "Docker",
-        category: "devops",
+        category: "cloud & devops",
         level: 70,
         icon: "docker",
         color: "#2496ED",

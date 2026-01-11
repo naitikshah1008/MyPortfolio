@@ -167,7 +167,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="mt-8 pt-8 border-t border-gray-200 dark:border-dark-700 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-gray-600 dark:text-gray-400 text-sm">
-            © {currentYear} Portfolio. All rights reserved.
+            © {currentYear} Naitik Shah. All rights reserved.
           </p>
           <p className="text-gray-600 dark:text-gray-400 text-sm flex items-center gap-1">
             Made with{" "}
