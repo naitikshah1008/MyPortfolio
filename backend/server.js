@@ -26,9 +26,10 @@ const app = express();
 // Middleware
 app.use(cors({
   origin: [
-    'http://localhost:5173',
-    'http://localhost:3001',
-    'https://portfolio-mu-three-88.vercel.app'
+    "http://localhost:5173",
+    "http://localhost:3001",
+    "https://my-portfolio-khaki-eight-80.vercel.app",
+    "https://my-portfolio-lxwvi907g-naitik-shahs-projects-fbea1886.vercel.app",
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
@@ -79,7 +80,7 @@ app.use("/api/newsletter", newsletterRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5002;
+const PORT = process.env.PORT || 6000;
 
 app.listen(PORT, () => {
   console.log(
