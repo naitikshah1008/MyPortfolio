@@ -11,6 +11,7 @@ const ProjectForm = ({ project, onClose, onSuccess }) => {
     techStack: "",
     category: "web",
     featured: false,
+    projectDate: "",
     links: {
       github: "",
       live: "",
@@ -34,6 +35,9 @@ const ProjectForm = ({ project, onClose, onSuccess }) => {
           github: project.links?.github || "",
           live: project.links?.live || "",
         },
+        projectDate: project.projectDate
+          ? project.projectDate.slice(0, 10)
+          : "",
       });
       setImagePreview(project.image || "");
     }
@@ -112,6 +116,19 @@ const ProjectForm = ({ project, onClose, onSuccess }) => {
           className="input"
           required
         />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium mb-2">Project Date</label>
+        <input
+          type="date"
+          value={formData.projectDate}
+          onChange={(e) =>
+            setFormData({ ...formData, projectDate: e.target.value })
+          }
+          className="input"
+        />
+        <p className="text-xs text-gray-500 mt-1">When you actually built this project</p>
       </div>
 
       <div>

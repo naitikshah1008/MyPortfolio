@@ -62,6 +62,10 @@ const projectSchema = new mongoose.Schema(
       enum: ["completed", "in-progress", "planned"],
       default: "completed",
     },
+    projectDate: {
+      type: Date,
+      required: false,
+    },
     tags: [
       {
         type: String,

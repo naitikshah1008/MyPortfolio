@@ -222,7 +222,7 @@ const ProjectDetail = () => {
                       Created Date
                     </label>
                     <p className="text-gray-900 dark:text-gray-100 font-medium">
-                      {new Date(project.createdAt).toLocaleDateString("en-US", {
+                      {new Date(project.projectDate || project.createdAt).toLocaleDateString("en-US", {
                         year: "numeric",
                         month: "long",
                         day: "numeric",

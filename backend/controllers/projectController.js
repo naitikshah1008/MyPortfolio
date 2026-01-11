@@ -21,6 +21,7 @@ export const getProjects = async (req, res) => {
 
     const projects = await Project.find(filter).sort({
       order: 1,
+      projectDate: -1,
       createdAt: -1,
     });
     res.json(projects);
@@ -63,6 +64,7 @@ export const createProject = async (req, res) => {
       featured: req.body.featured || false,
       status: req.body.status || "completed",
       tags: req.body.tags || [],
+      projectDate: req.body.projectDate || null,
     });
 
     const createdProject = await project.save();
@@ -93,6 +95,7 @@ export const updateProject = async (req, res) => {
         req.body.featured !== undefined ? req.body.featured : project.featured;
       project.status = req.body.status || project.status;
       project.tags = req.body.tags || project.tags;
+      project.projectDate = req.body.projectDate || project.projectDate;
 
       const updatedProject = await project.save();
       res.json(updatedProject);
