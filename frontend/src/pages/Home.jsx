@@ -49,17 +49,23 @@ const Home = () => {
         const totalProjects = allProjectsRes.data.length;
 
         // Calculate years of experience from the earliest start date
-        let yearsExperience = 0;
-        if (experienceRes.data.length > 0) {
-          const dates = experienceRes.data.map(
-            (exp) => new Date(exp.startDate)
-          );
-          const earliestDate = new Date(Math.min(...dates));
-          const today = new Date();
-          yearsExperience = Math.floor(
-            (today - earliestDate) / (1000 * 60 * 60 * 24 * 365)
-          );
-        }
+        // Calculate years of experience (WORK + INTERNSHIP only, no gaps)
+        // Calculate years of experience (ONLY work + internship, NO gaps)
+        let totalMonths = 0;
+        const validExperiences = experienceRes.data.filter(
+          (exp) => exp.category === "work" || exp.category === "internship"
+        );
+        validExperiences.forEach((exp) => {
+          const start = new Date(exp.startDate);
+          const end = exp.current || !exp.endDate
+            ? new Date()
+            : new Date(exp.endDate);
+          const months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+          if (months > 0) {
+            totalMonths += months;
+          }
+        });
+        const yearsExperience = Math.max(1, Math.floor(totalMonths / 12));
 
         setStats({
           totalProjects,
@@ -309,9 +315,7 @@ const Home = () => {
                   className="text-center"
                 >
                   <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent mb-2">
-                    {stats.totalProjects >= 5
-                      ? `${stats.totalProjects}+`
-                      : stats.totalProjects}
+                    {stats.totalProjects}
                   </div>
                   <div className="text-sm md:text-base text-gray-600 dark:text-gray-400">
                     Projects
