@@ -26,7 +26,6 @@ const app = express();
 // Middleware
 app.use(cors({
   origin: [
-    "http://localhost:5173",
     "http://localhost:3001",
     "https://my-portfolio-khaki-eight-80.vercel.app",
     "https://my-portfolio-naitik-shahs-projects-fbea1886.vercel.app/",

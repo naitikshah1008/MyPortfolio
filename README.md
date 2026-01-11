@@ -105,9 +105,9 @@
    ```
 
 5. **Access the application**
-   - Frontend: http://localhost:5173
+   - Frontend: http://localhost:3001
    - Backend: http://localhost:5001
-   - Admin: http://localhost:5173/admin
+   - Admin: http://localhost:3001/admin
 
 ---
 
