@@ -13,7 +13,7 @@ npm install
 2. Create `.env` file:
 
 ```bash
-VITE_API_URL=http://localhost:5000
+VITE_API_URL=http://localhost:5002
 ```
 
 3. Start development server:
@@ -22,7 +22,7 @@ VITE_API_URL=http://localhost:5000
 npm run dev
 ```
 
-The app will run on `http://localhost:3000`
+The app will run on `http://localhost:3001`
 
 ## 📦 Build for Production
 

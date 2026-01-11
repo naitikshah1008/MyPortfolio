@@ -27,7 +27,7 @@ const app = express();
 app.use(cors({
   origin: [
     'http://localhost:5173',
-    'http://localhost:3000',
+    'http://localhost:3001',
     'https://portfolio-mu-three-88.vercel.app'
   ],
   credentials: true,
@@ -79,7 +79,7 @@ app.use("/api/newsletter", newsletterRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5002;
 
 app.listen(PORT, () => {
   console.log(
