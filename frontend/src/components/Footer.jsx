@@ -19,10 +19,10 @@ const Footer = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const { data } = await api.get("/auth/profile");
+        const { data } = await api.get("/auth/portfolio-owner");
         setProfile(data);
       } catch (error) {
-        // Silent error handling
+        console.error("Failed to load portfolio owner");
       }
     };
     fetchProfile();
@@ -52,30 +52,39 @@ const Footer = () => {
     {
       icon: FiGithub,
       href: profile?.github
-        ? `https://github.com/${profile.github}`
+        ? profile.github.startsWith("http")
+          ? profile.github
+          : `https://github.com/${profile.github}`
         : "https://github.com",
       label: "GitHub",
     },
     {
       icon: FiLinkedin,
       href: profile?.linkedin
-        ? `https://linkedin.com/in/${profile.linkedin}`
+        ? profile.linkedin.startsWith("http")
+          ? profile.linkedin
+          : `https://linkedin.com/in/${profile.linkedin}`
         : "https://linkedin.com",
       label: "LinkedIn",
     },
     {
       icon: FiInstagram,
       href: profile?.instagram
-        ? `https://instagram.com/${profile.instagram}`
+        ? profile.instagram.startsWith("http")
+          ? profile.instagram
+          : `https://instagram.com/${profile.instagram}`
         : "https://instagram.com",
       label: "Instagram",
     },
     {
       icon: FiMail,
-      href: `mailto:${profile?.email || "contact@example.com"}`,
+      href: profile?.email
+        ? `mailto:${profile.email}`
+        : "mailto:contact@example.com",
       label: "Email",
     },
   ];
+
 
   const footerLinks = [
     { path: "/", label: "Home" },
