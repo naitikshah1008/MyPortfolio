@@ -131,36 +131,12 @@ const seedData = async () => {
         order: 4,
       },
       {
-        name: "Express",
-        category: "backend",
-        level: 85,
-        icon: "express",
-        color: "#000000",
-        order: 5,
-      },
-      {
-        name: "TailwindCSS",
-        category: "frontend",
-        level: 90,
-        icon: "tailwind",
-        color: "#06B6D4",
-        order: 6,
-      },
-      {
         name: "Docker",
         category: "devops",
         level: 70,
         icon: "docker",
         color: "#2496ED",
         order: 7,
-      },
-      {
-        name: "Git",
-        category: "tools",
-        level: 85,
-        icon: "git",
-        color: "#F05032",
-        order: 8,
       },
     ];
 

@@ -16,17 +16,20 @@ export const THEME = {
 };
 
 export const SKILL_CATEGORIES = [
-  "frontend",
-  "backend",
-  "database",
-  "devops",
-  "tools",
-  "other",
+  "languages",
+    "backend",
+    "distributed systems",
+    "ml/ai",
+    "cloud & devops",
+    "database",
+    "frontend",
 ];
 
 export const PROJECT_CATEGORIES = [
   "web",
-  "mobile",
+  "mobile application",
+  "scientific visualization",
+  "web application",
   "fullstack",
   "ai/ml",
   "other",

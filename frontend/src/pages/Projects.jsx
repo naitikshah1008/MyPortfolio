@@ -49,7 +49,7 @@ const Projects = () => {
     }
   }, [loading, projects, filter]);
 
-  const categories = ["all", "web", "mobile", "fullstack", "ai/ml", "other"];
+  const categories = ["all", "web", "mobile application", "scientific visualization", "web application", "fullstack", "ai/ml", "other"];
 
   return (
     <div className="min-h-screen pt-20">

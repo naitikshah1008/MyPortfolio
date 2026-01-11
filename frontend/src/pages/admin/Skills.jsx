@@ -18,12 +18,13 @@ const Skills = () => {
 
   const categories = [
     "all",
-    "frontend",
+    "languages",
     "backend",
+    "distributed systems",
+    "ml/ai",
+    "cloud & devops",
     "database",
-    "devops",
-    "tools",
-    "other",
+    "frontend",
   ];
 
   useEffect(() => {

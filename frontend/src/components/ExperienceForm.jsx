@@ -132,6 +132,7 @@ const ExperienceForm = ({ experience, onSuccess, onCancel }) => {
           >
             <option value="work">Work Experience</option>
             <option value="education">Education</option>
+            <option value="internship">Internship</option>
             <option value="project">Project</option>
             <option value="achievement">Achievement</option>
             <option value="certification">Certification</option>

@@ -50,12 +50,13 @@ const Skills = () => {
 
   const categories = [
     { id: "all", label: "All Skills" },
-    { id: "frontend", label: "Frontend" },
+    { id: "languages", label: "Languages" },
     { id: "backend", label: "Backend" },
+    { id: "distributed systems", label: "Distributed Systems" },
+    { id: "ml/ai", label: "ML/AI" },
+    { id: "cloud & devops", label: "Cloud & DevOps" },
     { id: "database", label: "Database" },
-    { id: "devops", label: "DevOps" },
-    { id: "tools", label: "Tools" },
-    { id: "other", label: "Other" },
+    { id: "frontend", label: "Frontend" },
   ];
 
   const filteredSkills =

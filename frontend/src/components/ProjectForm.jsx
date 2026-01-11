@@ -213,7 +213,9 @@ const ProjectForm = ({ project, onClose, onSuccess }) => {
           className="input"
         >
           <option value="web">Web</option>
-          <option value="mobile">Mobile</option>
+          <option value="mobile application">Mobile Application</option>
+          <option value="scientific visualization">Scientific Visualization</option>
+          <option value="web application">Web Application</option>
           <option value="fullstack">Full Stack</option>
           <option value="ai/ml">AI/ML</option>
           <option value="other">Other</option>

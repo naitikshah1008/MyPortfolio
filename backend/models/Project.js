@@ -32,7 +32,7 @@ const projectSchema = new mongoose.Schema(
     ],
     category: {
       type: String,
-      enum: ["web", "mobile", "fullstack", "ai/ml", "other"],
+      enum: ["web", "mobile application", "scientific visualization", "web application", "fullstack", "ai/ml", "other"],
       default: "web",
     },
     links: {

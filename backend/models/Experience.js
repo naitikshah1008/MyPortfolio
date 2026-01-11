@@ -16,6 +16,7 @@ const experienceSchema = new mongoose.Schema(
       enum: [
         "work",
         "education",
+        "internship",
         "project",
         "achievement",
         "certification",

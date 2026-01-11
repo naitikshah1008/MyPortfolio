@@ -7,7 +7,7 @@ const SkillForm = ({ skill, onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
     name: "",
     level: 50,
-    category: "frontend",
+    category: "languages",
     color: "#3b82f6",
   });
   const [loading, setLoading] = useState(false);
@@ -17,7 +17,7 @@ const SkillForm = ({ skill, onClose, onSuccess }) => {
       setFormData({
         name: skill.name || "",
         level: skill.level || 50,
-        category: skill.category || "frontend",
+        category: skill.category || "languages",
         color: skill.color || "#3b82f6",
       });
     }
@@ -90,12 +90,13 @@ const SkillForm = ({ skill, onClose, onSuccess }) => {
           className="input"
           required
         >
-          <option value="frontend">Frontend</option>
+          <option value="languages">Languages</option>
           <option value="backend">Backend</option>
+          <option value="distributed systems">Distributed Systems</option>
+          <option value="ml/ai">ML/AI</option>
+          <option value="cloud & devops">Cloud & DevOps</option>
           <option value="database">Database</option>
-          <option value="devops">DevOps</option>
-          <option value="tools">Tools</option>
-          <option value="other">Other</option>
+          <option value="frontend">Frontend</option>
         </select>
       </div>
 
