@@ -63,7 +63,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    twitter: {
+    instagram: {
       type: String,
       default: "",
     },

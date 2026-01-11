@@ -5,7 +5,7 @@ import api from "../utils/api";
 import {
   FiGithub,
   FiLinkedin,
-  FiTwitter,
+  FiInstagram,
   FiMail,
   FiHeart,
 } from "react-icons/fi";
@@ -64,11 +64,11 @@ const Footer = () => {
       label: "LinkedIn",
     },
     {
-      icon: FiTwitter,
-      href: profile?.twitter
-        ? `https://twitter.com/${profile.twitter}`
-        : "https://twitter.com",
-      label: "Twitter",
+      icon: FiInstagram,
+      href: profile?.instagram
+        ? `https://instagram.com/${profile.instagram}`
+        : "https://instagram.com",
+      label: "Instagram",
     },
     {
       icon: FiMail,

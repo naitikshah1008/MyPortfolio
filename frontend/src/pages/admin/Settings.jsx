@@ -388,13 +388,13 @@ const Settings = () => {
             </p>
           </div>
 
-          {/* Twitter */}
+          {/* Instagram */}
           <div className="p-4 rounded-lg bg-gray-50 dark:bg-dark-700/50">
             <label className="text-sm font-medium text-gray-500 dark:text-gray-400 block mb-2">
-              Twitter
+              Instagram
             </label>
             <p className="text-gray-900 dark:text-gray-100">
-              {profile?.twitter ? `@${profile.twitter}` : "Not set"}
+              {profile?.instagram ? `@${profile.instagram}` : "Not set"}
             </p>
           </div>
 

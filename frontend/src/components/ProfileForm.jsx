@@ -10,7 +10,7 @@ const ProfileForm = ({ profile, onSubmit, onClose }) => {
     email: "",
     github: "",
     linkedin: "",
-    twitter: "",
+    instagram: "",
     roles: [],
   });
   const [loading, setLoading] = useState(false);
@@ -25,7 +25,7 @@ const ProfileForm = ({ profile, onSubmit, onClose }) => {
         email: profile.email || "",
         github: profile.github || "",
         linkedin: profile.linkedin || "",
-        twitter: profile.twitter || "",
+        instagram: profile.instagram || "",
         roles: profile.roles || [],
       });
     }
@@ -269,16 +269,16 @@ const ProfileForm = ({ profile, onSubmit, onClose }) => {
 
           <div>
             <label
-              htmlFor="twitter"
+              htmlFor="instagram"
               className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
             >
-              Twitter Username
+              Instagram Username
             </label>
             <input
               type="text"
-              id="twitter"
-              name="twitter"
-              value={formData.twitter}
+              id="instagram"
+              name="instagram"
+              value={formData.instagram}
               onChange={handleChange}
               className="input"
               placeholder="username"
