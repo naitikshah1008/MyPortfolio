@@ -3,7 +3,7 @@ import { FiSave, FiX, FiUpload, FiImage } from "react-icons/fi";
 import toast from "react-hot-toast";
 import api from "../utils/api";
 
-const BlogForm = ({ blog, onClose, onSuccess }) => {
+const BlogForm = ({ blog, onCancel, onSuccess }) => {
   const [formData, setFormData] = useState({
     title: "",
     excerpt: "",
@@ -87,7 +87,6 @@ const BlogForm = ({ blog, onClose, onSuccess }) => {
 
       // Call callbacks after successful operation
       if (onSuccess) onSuccess();
-      if (onClose) onClose();
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to save blog");
     } finally {
@@ -237,7 +236,7 @@ const BlogForm = ({ blog, onClose, onSuccess }) => {
         </button>
         <button
           type="button"
-          onClick={onClose}
+          onClick={onCancel}
           className="flex-1 btn-secondary flex items-center justify-center gap-2"
         >
           <FiX />
