@@ -23,6 +23,7 @@ const Skills = () => {
     "distributed systems",
     "ml/ai",
     "cloud & devops",
+    "tools & infrastructure",
     "database",
     "frontend",
   ];

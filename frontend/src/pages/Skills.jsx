@@ -55,6 +55,7 @@ const Skills = () => {
     { id: "distributed systems", label: "Distributed Systems" },
     { id: "ml/ai", label: "ML/AI" },
     { id: "cloud & devops", label: "Cloud & DevOps" },
+    { id: "tools & infrastructure", label: "Tools & Infrastructure" },
     { id: "database", label: "Database" },
     { id: "frontend", label: "Frontend" },
   ];

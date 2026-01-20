@@ -21,6 +21,7 @@ export const SKILL_CATEGORIES = [
     "distributed systems",
     "ml/ai",
     "cloud & devops",
+    "tools & infrastructure",
     "database",
     "frontend",
 ];

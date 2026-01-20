@@ -95,6 +95,7 @@ const SkillForm = ({ skill, onClose, onSuccess }) => {
           <option value="distributed systems">Distributed Systems</option>
           <option value="ml/ai">ML/AI</option>
           <option value="cloud & devops">Cloud & DevOps</option>
+          <option value="tools & infrastructure">Tools & Infrastructure</option>
           <option value="database">Database</option>
           <option value="frontend">Frontend</option>
         </select>
