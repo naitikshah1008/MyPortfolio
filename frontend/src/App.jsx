@@ -29,6 +29,7 @@ import AdminSettings from "./pages/admin/Settings";
 
 // Protected Route
 import ProtectedRoute from "./components/ProtectedRoute";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   const { theme } = useThemeStore();
@@ -43,46 +44,49 @@ function App() {
   }, [theme]);
 
   return (
-    <Routes>
-      {/* Public Routes */}
-      <Route path="/" element={<MainLayout />}>
-        <Route index element={<Home />} />
-        <Route path="projects" element={<Projects />} />
-        <Route path="projects/:id" element={<ProjectDetail />} />
-        <Route path="skills" element={<Skills />} />
-        <Route path="experience" element={<Experience />} />
-        <Route path="coding-stats" element={<CodingStats />} />
-        <Route path="blog" element={<Blog />} />
-        <Route path="blog/:id" element={<BlogDetail />} />
-        <Route path="contact" element={<Contact />} />
-      </Route>
+    <>
+      <ScrollToTop />
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<Home />} />
+          <Route path="projects" element={<Projects />} />
+          <Route path="projects/:id" element={<ProjectDetail />} />
+          <Route path="skills" element={<Skills />} />
+          <Route path="experience" element={<Experience />} />
+          <Route path="coding-stats" element={<CodingStats />} />
+          <Route path="blog" element={<Blog />} />
+          <Route path="blog/:id" element={<BlogDetail />} />
+          <Route path="contact" element={<Contact />} />
+        </Route>
 
-      {/* Auth Routes */}
-      <Route path="/login" element={<Login />} />
+        {/* Auth Routes */}
+        <Route path="/login" element={<Login />} />
 
-      {/* Admin Routes */}
-      <Route
-        path="/admin"
-        element={
-          <ProtectedRoute>
-            <AdminLayout />
-          </ProtectedRoute>
-        }
-      >
-        <Route index element={<AdminDashboard />} />
-        <Route path="projects" element={<AdminProjects />} />
-        <Route path="skills" element={<AdminSkills />} />
-        <Route path="experiences" element={<AdminExperiences />} />
-        <Route path="blogs" element={<AdminBlogs />} />
-        <Route path="contacts" element={<AdminContacts />} />
-        <Route path="settings" element={<AdminSettings />} />
-      </Route>
+        {/* Admin Routes */}
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <AdminLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<AdminDashboard />} />
+          <Route path="projects" element={<AdminProjects />} />
+          <Route path="skills" element={<AdminSkills />} />
+          <Route path="experiences" element={<AdminExperiences />} />
+          <Route path="blogs" element={<AdminBlogs />} />
+          <Route path="contacts" element={<AdminContacts />} />
+          <Route path="settings" element={<AdminSettings />} />
+        </Route>
 
-      {/* 404 - Catch all */}
-      <Route path="*" element={<MainLayout />}>
-        <Route path="*" element={<Home />} />
-      </Route>
-    </Routes>
+        {/* 404 - Catch all */}
+        <Route path="*" element={<MainLayout />}>
+          <Route path="*" element={<Home />} />
+        </Route>
+      </Routes>
+    </>
   );
 }
 
