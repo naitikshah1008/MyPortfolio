@@ -14,6 +14,7 @@ import experienceRoutes from "./routes/experienceRoutes.js";
 import codingProfileRoutes from "./routes/codingProfileRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
 import newsletterRoutes from "./routes/newsletterRoutes.js";
+import homeRoutes from "./routes/homeRoutes.js";
 
 // Load env vars
 dotenv.config();
@@ -35,6 +36,7 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use("/api/homepage", homeRoutes);
 
 // Routes
 app.get("/", (req, res) => {

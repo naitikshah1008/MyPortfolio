@@ -34,43 +34,16 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [projectsRes, skillsRes, allProjectsRes, experienceRes] =
-          await Promise.all([
-            api.get("/projects?featured=true"),
-            api.get("/skills"),
-            api.get("/projects"),
-            api.get("/experiences"),
-          ]);
+        const { data } = await api.get("/homepage");
 
-        setFeaturedProjects(projectsRes.data.slice(0, 3));
-        setSkills(skillsRes.data.slice(0, 8));
-
-        // Calculate real stats
-        const totalProjects = allProjectsRes.data.length;
-
-        // Calculate years of experience from the earliest start date
-        // Calculate years of experience (WORK + INTERNSHIP only, no gaps)
-        // Calculate years of experience (ONLY work + internship, NO gaps)
-        let totalMonths = 0;
-        const validExperiences = experienceRes.data.filter(
-          (exp) => exp.category === "work" || exp.category === "internship"
-        );
-        validExperiences.forEach((exp) => {
-          const start = new Date(exp.startDate);
-          const end = exp.current || !exp.endDate
-            ? new Date()
-            : new Date(exp.endDate);
-          const months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
-          if (months > 0) {
-            totalMonths += months;
+        setFeaturedProjects(data.featuredProjects || []);
+        setSkills(data.skills || []);
+        setStats(
+          data.stats || {
+            totalProjects: 0,
+            yearsExperience: 0,
           }
-        });
-        const yearsExperience = Math.max(1, Math.floor(totalMonths / 12));
-
-        setStats({
-          totalProjects,
-          yearsExperience: yearsExperience > 0 ? yearsExperience : 1,
-        });
+        );
       } catch (error) {
         toast.error("Failed to load content");
       } finally {
