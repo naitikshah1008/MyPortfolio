@@ -108,7 +108,7 @@ export const updateUserProfile = async (req, res) => {
       user.bio = req.body.bio || user.bio;
       user.github = req.body.github || user.github;
       user.linkedin = req.body.linkedin || user.linkedin;
-      user.instagram = req.body.instagram || user.instagram;
+      user.hackerrank = req.body.hackerrank || user.hackerrank;
 
       // Update roles if provided
       if (req.body.roles !== undefined) {
@@ -131,7 +131,7 @@ export const updateUserProfile = async (req, res) => {
         bio: updatedUser.bio,
         github: updatedUser.github,
         linkedin: updatedUser.linkedin,
-        instagram: updatedUser.instagram,
+        hackerrank: updatedUser.hackerrank,
         roles: updatedUser.roles,
         token: generateToken(updatedUser._id),
       });

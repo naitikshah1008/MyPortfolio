@@ -10,7 +10,7 @@ const ProfileForm = ({ profile, onSubmit, onClose }) => {
     email: "",
     github: "",
     linkedin: "",
-    instagram: "",
+    hackerrank: "",
     roles: [],
   });
   const [loading, setLoading] = useState(false);
@@ -25,7 +25,7 @@ const ProfileForm = ({ profile, onSubmit, onClose }) => {
         email: profile.email || "",
         github: profile.github || "",
         linkedin: profile.linkedin || "",
-        instagram: profile.instagram || "",
+        hackerrank: profile.hackerrank || "",
         roles: profile.roles || [],
       });
     }
@@ -269,16 +269,16 @@ const ProfileForm = ({ profile, onSubmit, onClose }) => {
 
           <div>
             <label
-              htmlFor="instagram"
+              htmlFor="hackerrank"
               className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
             >
-              Instagram Username
+              Hackerrank Username
             </label>
             <input
               type="text"
-              id="instagram"
-              name="instagram"
-              value={formData.instagram}
+              id="hackerrank"
+              name="hackerrank"
+              value={formData.hackerrank}
               onChange={handleChange}
               className="input"
               placeholder="username"

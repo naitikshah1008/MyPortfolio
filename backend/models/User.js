@@ -63,7 +63,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    instagram: {
+    hackerrank: {
       type: String,
       default: "",
     },

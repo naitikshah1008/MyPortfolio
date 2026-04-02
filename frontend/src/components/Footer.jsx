@@ -5,10 +5,11 @@ import api from "../utils/api";
 import {
   FiGithub,
   FiLinkedin,
-  FiInstagram,
   FiMail,
   FiHeart,
 } from "react-icons/fi";
+
+import { FaHackerrank } from "react-icons/fa";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -68,13 +69,13 @@ const Footer = () => {
       label: "LinkedIn",
     },
     {
-      icon: FiInstagram,
-      href: profile?.instagram
-        ? profile.instagram.startsWith("http")
-          ? profile.instagram
-          : `https://instagram.com/${profile.instagram}`
-        : "https://instagram.com",
-      label: "Instagram",
+      icon: FaHackerrank,
+      href: profile?.hackerrank
+        ? profile.hackerrank.startsWith("http")
+          ? profile.hackerrank
+          : `https://hackerrank.com/${profile.hackerrank}`
+        : "https://hackerrank.com",
+      label: "Hackerrank",
     },
     {
       icon: FiMail,
