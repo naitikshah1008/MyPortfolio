@@ -12,10 +12,10 @@ import {
 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import { getFallbackProfile, getPortfolioOwner } from "../utils/profile";
+import { getFallbackProfile } from "../utils/profile";
 import { loadGsapWithScrollTrigger } from "../utils/animations";
 
-const Hero = () => {
+const Hero = ({ profileData }) => {
   const [profile, setProfile] = useState(getFallbackProfile);
   const [showResumePreview, setShowResumePreview] = useState(false);
   const [pdfLoadError, setPdfLoadError] = useState(false);
@@ -32,27 +32,10 @@ const Hero = () => {
   const socialRef = useRef(null);
 
   useEffect(() => {
-    let isMounted = true;
-
-    const fetchProfile = async () => {
-      try {
-        const data = await getPortfolioOwner();
-        if (isMounted && data) {
-          setProfile({ ...getFallbackProfile(), ...data });
-        }
-      } catch (error) {
-        if (isMounted) {
-          setProfile(getFallbackProfile());
-        }
-      }
-    };
-
-    fetchProfile();
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+    if (profileData) {
+      setProfile({ ...getFallbackProfile(), ...profileData });
+    }
+  }, [profileData]);
 
   // GSAP animations
   useEffect(() => {

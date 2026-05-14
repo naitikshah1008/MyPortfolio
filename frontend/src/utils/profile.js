@@ -1,5 +1,3 @@
-import api from "./api";
-
 const fallbackProfile = {
   name: "Naitik Shah",
   title: "Full Stack Developer",
@@ -19,20 +17,4 @@ const fallbackProfile = {
   ],
 };
 
-let ownerProfilePromise;
-
 export const getFallbackProfile = () => fallbackProfile;
-
-export const getPortfolioOwner = () => {
-  if (!ownerProfilePromise) {
-    ownerProfilePromise = api
-      .get("/auth/portfolio-owner")
-      .then(({ data }) => data)
-      .catch((error) => {
-        ownerProfilePromise = null;
-        throw error;
-      });
-  }
-
-  return ownerProfilePromise;
-};

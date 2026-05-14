@@ -11,13 +11,22 @@ import { FiGithub, FiExternalLink, FiCode, FiBookOpen } from "react-icons/fi";
 import { useState, useEffect } from "react";
 import api from "../utils/api";
 
-const CodingProfilesSection = () => {
-  const [profiles, setProfiles] = useState([]);
-  const [loading, setLoading] = useState(true);
+const CodingProfilesSection = ({
+  profiles: initialProfiles,
+  loading: initialLoading,
+}) => {
+  const [profiles, setProfiles] = useState(initialProfiles || []);
+  const [loading, setLoading] = useState(initialLoading ?? true);
 
   useEffect(() => {
+    if (initialProfiles) {
+      setProfiles(initialProfiles.filter((p) => p.enabled));
+      setLoading(Boolean(initialLoading));
+      return;
+    }
+
     fetchProfiles();
-  }, []);
+  }, [initialProfiles, initialLoading]);
 
   const fetchProfiles = async () => {
     try {

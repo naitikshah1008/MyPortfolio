@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import api from "../utils/api";
-import { getFallbackProfile, getPortfolioOwner } from "../utils/profile";
+import { getFallbackProfile } from "../utils/profile";
 import {
   FiGithub,
   FiLinkedin,
@@ -16,30 +16,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const [profile, setProfile] = useState(getFallbackProfile);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    const fetchProfile = async () => {
-      try {
-        const data = await getPortfolioOwner();
-        if (isMounted) {
-          setProfile({ ...getFallbackProfile(), ...data });
-        }
-      } catch (error) {
-        if (isMounted) {
-          setProfile(getFallbackProfile());
-        }
-      }
-    };
-
-    fetchProfile();
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  const [profile] = useState(getFallbackProfile);
 
   const handleSubscribe = async (e) => {
     e.preventDefault();

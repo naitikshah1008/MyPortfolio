@@ -1,22 +1,52 @@
 import Project from "../models/Project.js";
 import Experience from "../models/Experience.js";
 import Skill from "../models/Skill.js";
+import User from "../models/User.js";
+import CodingProfile from "../models/CodingProfile.js";
+
+const fallbackOwnerProfile = {
+  name: "Naitik Shah",
+  title: "Full Stack Developer",
+  bio: "Full Stack Developer passionate about creating beautiful and functional web applications.",
+  email: "",
+  github: "",
+  linkedin: "",
+  hackerrank: "",
+  resume: null,
+  profileImage: null,
+  codingProfiles: {},
+  roles: [
+    "Full Stack Developer",
+    "Web Developer",
+    "Software Engineer",
+    "MERN Stack Developer",
+  ],
+};
 
 export const getHomepageData = async (req, res) => {
   try {
-    const [featuredProjects, totalProjects, skills, experiences] =
+    const [owner, featuredProjects, totalProjects, skills, experiences, codingProfiles] =
       await Promise.all([
+        User.findOne({ role: "admin" })
+          .select(
+            "name title bio email github linkedin hackerrank resume profileImage codingProfiles roles"
+          )
+          .lean(),
+
         Project.find({ featured: true })
           .sort({ order: 1, projectDate: -1, createdAt: -1 })
-          .limit(3),
+          .limit(3)
+          .lean(),
 
         Project.countDocuments(),
 
-        Skill.find().sort({ order: 1 }).limit(8),
+        Skill.find().sort({ order: 1 }).limit(8).lean(),
 
         Experience.find({
           category: { $in: ["work", "internship"] },
-        }),
+        }).lean(),
+
+        CodingProfile.find({ enabled: true }).sort({ platform: 1 }).lean(),
       ]);
 
     let totalMonths = 0;
@@ -37,9 +67,16 @@ export const getHomepageData = async (req, res) => {
 
     const yearsExperience = Math.max(1, Math.floor(totalMonths / 12));
 
+    res.set(
+      "Cache-Control",
+      "public, max-age=60, s-maxage=300, stale-while-revalidate=86400"
+    );
+
     res.json({
+      ownerProfile: owner || fallbackOwnerProfile,
       featuredProjects,
       skills,
+      codingProfiles,
       stats: {
         totalProjects,
         yearsExperience,

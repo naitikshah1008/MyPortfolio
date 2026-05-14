@@ -24,6 +24,8 @@ const Home = () => {
     totalProjects: 0,
     yearsExperience: 0,
   });
+  const [ownerProfile, setOwnerProfile] = useState(null);
+  const [codingProfiles, setCodingProfiles] = useState([]);
 
   const projectsRef = useRef(null);
   const skillsRef = useRef(null);
@@ -35,6 +37,8 @@ const Home = () => {
 
         setFeaturedProjects(data.featuredProjects || []);
         setSkills(data.skills || []);
+        setOwnerProfile(data.ownerProfile || null);
+        setCodingProfiles(data.codingProfiles || []);
         setStats(
           data.stats || {
             totalProjects: 0,
@@ -127,7 +131,7 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <Hero />
+      <Hero profileData={ownerProfile} />
 
       {/* Featured Projects Section */}
       <section ref={projectsRef} className="section bg-gray-50 dark:bg-dark-800">
@@ -227,7 +231,7 @@ const Home = () => {
       </section>
 
       {/* Coding Profiles Section */}
-      <CodingProfilesSection />
+      <CodingProfilesSection profiles={codingProfiles} loading={loading} />
 
       {/* CTA Section - Minimalistic */}
       <section className="py-12 md:py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-white dark:bg-dark-900">
