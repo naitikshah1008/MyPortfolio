@@ -12,15 +12,11 @@ import {
 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import api from "../utils/api";
-
-gsap.registerPlugin(ScrollTrigger);
+import { getFallbackProfile, getPortfolioOwner } from "../utils/profile";
+import { loadGsapWithScrollTrigger } from "../utils/animations";
 
 const Hero = () => {
-  const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState(getFallbackProfile);
   const [showResumePreview, setShowResumePreview] = useState(false);
   const [pdfLoadError, setPdfLoadError] = useState(false);
 
@@ -36,67 +32,83 @@ const Hero = () => {
   const socialRef = useRef(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchProfile = async () => {
       try {
-        const response = await api.get("/auth/portfolio-owner");
-        if (response.data) {
-          setProfile(response.data);
+        const data = await getPortfolioOwner();
+        if (isMounted && data) {
+          setProfile({ ...getFallbackProfile(), ...data });
         }
       } catch (error) {
-        // Silent error handling
-      } finally {
-        setLoading(false);
+        if (isMounted) {
+          setProfile(getFallbackProfile());
+        }
       }
     };
 
     fetchProfile();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   // GSAP animations
   useEffect(() => {
-    if (!loading && profile && heroRef.current) {
-      const ctx = gsap.context(() => {
-        // Animate text elements
-        gsap.from(".hero-text", {
-          y: 50,
-          opacity: 0,
-          duration: 1,
-          stagger: 0.2,
-          ease: "power3.out",
-        });
+    if (profile && heroRef.current) {
+      let ctx;
+      let cancelled = false;
 
-        // Animate profile image
-        gsap.from(imageRef.current, {
-          scale: 0.8,
-          opacity: 0,
-          duration: 1.2,
-          ease: "elastic.out(1, 0.75)",
-          delay: 0.3,
-        });
+      loadGsapWithScrollTrigger().then((gsap) => {
+        if (cancelled || !heroRef.current) return;
 
-        // Animate social icons
-        gsap.from(".social-icon", {
-          scale: 0,
-          opacity: 0,
-          duration: 0.6,
-          stagger: 0.1,
-          ease: "back.out(1.7)",
-          delay: 0.8,
-        });
+        ctx = gsap.context(() => {
+          // Animate text elements
+          gsap.from(".hero-text", {
+            y: 50,
+            opacity: 0,
+            duration: 1,
+            stagger: 0.2,
+            ease: "power3.out",
+          });
 
-        // Floating animation for profile image
-        gsap.to(imageRef.current, {
-          y: -20,
-          duration: 2.5,
-          ease: "sine.inOut",
-          repeat: -1,
-          yoyo: true,
-        });
-      }, heroRef);
+          // Animate profile image
+          gsap.from(imageRef.current, {
+            scale: 0.8,
+            opacity: 0,
+            duration: 1.2,
+            ease: "elastic.out(1, 0.75)",
+            delay: 0.3,
+          });
 
-      return () => ctx.revert();
+          // Animate social icons
+          gsap.from(".social-icon", {
+            scale: 0,
+            opacity: 0,
+            duration: 0.6,
+            stagger: 0.1,
+            ease: "back.out(1.7)",
+            delay: 0.8,
+          });
+
+          // Floating animation for profile image
+          gsap.to(imageRef.current, {
+            y: -20,
+            duration: 2.5,
+            ease: "sine.inOut",
+            repeat: -1,
+            yoyo: true,
+          });
+        }, heroRef);
+      });
+
+      return () => {
+        cancelled = true;
+        ctx?.revert();
+      };
     }
-  }, [loading, profile]);
+  }, [profile]);
 
   // Typing animation effect
   useEffect(() => {
@@ -140,29 +152,6 @@ const Hero = () => {
 
     return () => clearTimeout(timeout);
   }, [displayedText, isDeleting, currentRoleIndex, profile]);
-
-  if (loading) {
-    return (
-      <section className="relative min-h-screen flex items-center justify-center bg-gray-50 dark:bg-dark-900">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-primary-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Loading...</p>
-        </div>
-      </section>
-    );
-  }
-
-  if (!profile) {
-    return (
-      <section className="relative min-h-screen flex items-center justify-center bg-gray-50 dark:bg-dark-900">
-        <div className="text-center">
-          <p className="text-gray-600 dark:text-gray-400">
-            Failed to load profile
-          </p>
-        </div>
-      </section>
-    );
-  }
 
   const handleDownloadResume = () => {
     if (!profile?.resume?.url) return;

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import api from "../utils/api";
+import { getFallbackProfile, getPortfolioOwner } from "../utils/profile";
 import {
   FiGithub,
   FiLinkedin,
@@ -15,18 +16,29 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const [profile, setProfile] = useState(null);
+  const [profile, setProfile] = useState(getFallbackProfile);
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchProfile = async () => {
       try {
-        const { data } = await api.get("/auth/portfolio-owner");
-        setProfile(data);
+        const data = await getPortfolioOwner();
+        if (isMounted) {
+          setProfile({ ...getFallbackProfile(), ...data });
+        }
       } catch (error) {
-        console.error("Failed to load portfolio owner");
+        if (isMounted) {
+          setProfile(getFallbackProfile());
+        }
       }
     };
+
     fetchProfile();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const handleSubscribe = async (e) => {

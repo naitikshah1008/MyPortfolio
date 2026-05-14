@@ -1,31 +1,31 @@
 import { Routes, Route } from "react-router-dom";
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import useThemeStore from "./store/themeStore";
 
 // Layouts
 import MainLayout from "./layouts/MainLayout";
-import AdminLayout from "./layouts/AdminLayout";
 
 // Public Pages
-import Home from "./pages/Home";
-import Projects from "./pages/Projects";
-import ProjectDetail from "./pages/ProjectDetail";
-import Skills from "./pages/Skills";
-import Experience from "./pages/Experience";
-import CodingStats from "./pages/CodingStats";
-import Blog from "./pages/Blog";
-import BlogDetail from "./pages/BlogDetail";
-import Contact from "./pages/Contact";
-import Login from "./pages/Login";
+const Home = lazy(() => import("./pages/Home"));
+const Projects = lazy(() => import("./pages/Projects"));
+const ProjectDetail = lazy(() => import("./pages/ProjectDetail"));
+const Skills = lazy(() => import("./pages/Skills"));
+const Experience = lazy(() => import("./pages/Experience"));
+const CodingStats = lazy(() => import("./pages/CodingStats"));
+const Blog = lazy(() => import("./pages/Blog"));
+const BlogDetail = lazy(() => import("./pages/BlogDetail"));
+const Contact = lazy(() => import("./pages/Contact"));
+const Login = lazy(() => import("./pages/Login"));
 
 // Admin Pages
-import AdminDashboard from "./pages/admin/Dashboard";
-import AdminProjects from "./pages/admin/Projects";
-import AdminSkills from "./pages/admin/Skills";
-import AdminExperiences from "./pages/admin/Experiences";
-import AdminBlogs from "./pages/admin/Blogs";
-import AdminContacts from "./pages/admin/Contacts";
-import AdminSettings from "./pages/admin/Settings";
+const AdminLayout = lazy(() => import("./layouts/AdminLayout"));
+const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
+const AdminProjects = lazy(() => import("./pages/admin/Projects"));
+const AdminSkills = lazy(() => import("./pages/admin/Skills"));
+const AdminExperiences = lazy(() => import("./pages/admin/Experiences"));
+const AdminBlogs = lazy(() => import("./pages/admin/Blogs"));
+const AdminContacts = lazy(() => import("./pages/admin/Contacts"));
+const AdminSettings = lazy(() => import("./pages/admin/Settings"));
 
 // Protected Route
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -46,46 +46,48 @@ function App() {
   return (
     <>
       <ScrollToTop />
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<MainLayout />}>
-          <Route index element={<Home />} />
-          <Route path="projects" element={<Projects />} />
-          <Route path="projects/:id" element={<ProjectDetail />} />
-          <Route path="skills" element={<Skills />} />
-          <Route path="experience" element={<Experience />} />
-          <Route path="coding-stats" element={<CodingStats />} />
-          <Route path="blog" element={<Blog />} />
-          <Route path="blog/:id" element={<BlogDetail />} />
-          <Route path="contact" element={<Contact />} />
-        </Route>
+      <Suspense fallback={<div className="min-h-screen bg-white dark:bg-dark-900" />}>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<MainLayout />}>
+            <Route index element={<Home />} />
+            <Route path="projects" element={<Projects />} />
+            <Route path="projects/:id" element={<ProjectDetail />} />
+            <Route path="skills" element={<Skills />} />
+            <Route path="experience" element={<Experience />} />
+            <Route path="coding-stats" element={<CodingStats />} />
+            <Route path="blog" element={<Blog />} />
+            <Route path="blog/:id" element={<BlogDetail />} />
+            <Route path="contact" element={<Contact />} />
+          </Route>
 
-        {/* Auth Routes */}
-        <Route path="/login" element={<Login />} />
+          {/* Auth Routes */}
+          <Route path="/login" element={<Login />} />
 
-        {/* Admin Routes */}
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute>
-              <AdminLayout />
-            </ProtectedRoute>
-          }
-        >
-          <Route index element={<AdminDashboard />} />
-          <Route path="projects" element={<AdminProjects />} />
-          <Route path="skills" element={<AdminSkills />} />
-          <Route path="experiences" element={<AdminExperiences />} />
-          <Route path="blogs" element={<AdminBlogs />} />
-          <Route path="contacts" element={<AdminContacts />} />
-          <Route path="settings" element={<AdminSettings />} />
-        </Route>
+          {/* Admin Routes */}
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <AdminLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<AdminDashboard />} />
+            <Route path="projects" element={<AdminProjects />} />
+            <Route path="skills" element={<AdminSkills />} />
+            <Route path="experiences" element={<AdminExperiences />} />
+            <Route path="blogs" element={<AdminBlogs />} />
+            <Route path="contacts" element={<AdminContacts />} />
+            <Route path="settings" element={<AdminSettings />} />
+          </Route>
 
-        {/* 404 - Catch all */}
-        <Route path="*" element={<MainLayout />}>
-          <Route path="*" element={<Home />} />
-        </Route>
-      </Routes>
+          {/* 404 - Catch all */}
+          <Route path="*" element={<MainLayout />}>
+            <Route path="*" element={<Home />} />
+          </Route>
+        </Routes>
+      </Suspense>
     </>
   );
 }

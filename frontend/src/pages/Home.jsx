@@ -8,16 +8,13 @@ import {
   FiArrowRight,
 } from "react-icons/fi";
 import { useEffect, useState, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import api from "../utils/api";
 import toast from "react-hot-toast";
 import Hero from "../components/Hero";
 import ProjectCard from "../components/ProjectCard";
 import SkillCard from "../components/SkillCard";
 import CodingProfilesSection from "../components/CodingProfilesSection";
-
-gsap.registerPlugin(ScrollTrigger);
+import { loadGsapWithScrollTrigger } from "../utils/animations";
 
 const Home = () => {
   const [featuredProjects, setFeaturedProjects] = useState([]);
@@ -57,47 +54,73 @@ const Home = () => {
   // GSAP ScrollTrigger animations
   useEffect(() => {
     if (!loading && featuredProjects.length > 0 && projectsRef.current) {
-      gsap.fromTo(".project-card-gsap",
-        {
-          y: 100,
-          opacity: 0,
-        },
-        {
-          scrollTrigger: {
-            trigger: projectsRef.current,
-            start: "top 80%",
+      let animation;
+      let cancelled = false;
+
+      loadGsapWithScrollTrigger().then((gsap) => {
+        if (cancelled || !projectsRef.current) return;
+
+        animation = gsap.fromTo(
+          ".project-card-gsap",
+          {
+            y: 100,
+            opacity: 0,
           },
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          stagger: 0.2,
-          ease: "power3.out",
-          clearProps: "all",
-        }
-      );
+          {
+            scrollTrigger: {
+              trigger: projectsRef.current,
+              start: "top 80%",
+            },
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            stagger: 0.2,
+            ease: "power3.out",
+            clearProps: "all",
+          },
+        );
+      });
+
+      return () => {
+        cancelled = true;
+        animation?.kill();
+      };
     }
   }, [loading, featuredProjects]);
 
   useEffect(() => {
     if (!loading && skills.length > 0 && skillsRef.current) {
-      gsap.fromTo(".skill-card-gsap",
-        {
-          scale: 0.8,
-          opacity: 0,
-        },
-        {
-          scrollTrigger: {
-            trigger: skillsRef.current,
-            start: "top 80%",
+      let animation;
+      let cancelled = false;
+
+      loadGsapWithScrollTrigger().then((gsap) => {
+        if (cancelled || !skillsRef.current) return;
+
+        animation = gsap.fromTo(
+          ".skill-card-gsap",
+          {
+            scale: 0.8,
+            opacity: 0,
           },
-          scale: 1,
-          opacity: 1,
-          duration: 0.6,
-          stagger: 0.1,
-          ease: "back.out(1.7)",
-          clearProps: "all",
-        }
-      );
+          {
+            scrollTrigger: {
+              trigger: skillsRef.current,
+              start: "top 80%",
+            },
+            scale: 1,
+            opacity: 1,
+            duration: 0.6,
+            stagger: 0.1,
+            ease: "back.out(1.7)",
+            clearProps: "all",
+          },
+        );
+      });
+
+      return () => {
+        cancelled = true;
+        animation?.kill();
+      };
     }
   }, [loading, skills]);
 
