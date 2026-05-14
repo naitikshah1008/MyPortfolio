@@ -10,6 +10,7 @@ import {
 } from "react-icons/fi";
 import api from "../utils/api";
 import toast from "react-hot-toast";
+import { formatProjectCategory } from "../utils/constants";
 
 const ProjectDetail = () => {
   const { id } = useParams();
@@ -213,7 +214,7 @@ const ProjectDetail = () => {
                       Category
                     </label>
                     <p className="text-gray-900 dark:text-gray-100 font-medium">
-                      {project.category || "Web Development"}
+                      {formatProjectCategory(project.category) || "Web Development"}
                     </p>
                   </div>
                   <div>

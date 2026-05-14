@@ -5,6 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import api from "../utils/api";
 import toast from "react-hot-toast";
 import ProjectCard from "../components/ProjectCard";
+import { PROJECT_CATEGORIES, formatProjectCategory } from "../utils/constants";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -49,7 +50,7 @@ const Projects = () => {
     }
   }, [loading, projects, filter]);
 
-  const categories = ["all", "web", "mobile application", "scientific visualization", "web application", "fullstack", "ai/ml", "other"];
+  const categories = ["all", ...PROJECT_CATEGORIES];
 
   return (
     <div className="min-h-screen pt-20">
@@ -81,7 +82,7 @@ const Projects = () => {
                     : "bg-gray-200 dark:bg-dark-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-dark-600"
                 }`}
               >
-                {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                {formatProjectCategory(cat)}
               </button>
             ))}
           </div>

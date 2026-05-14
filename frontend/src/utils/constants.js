@@ -35,3 +35,22 @@ export const PROJECT_CATEGORIES = [
   "ai/ml",
   "other",
 ];
+
+export const PROJECT_CATEGORY_LABELS = {
+  all: "All",
+  web: "Web",
+  "mobile application": "Mobile Application",
+  "scientific visualization": "Scientific Visualization",
+  "web application": "Web Application",
+  fullstack: "Fullstack",
+  "ai/ml": "AI/ML",
+  other: "Other",
+};
+
+export const formatProjectCategory = (category) =>
+  PROJECT_CATEGORY_LABELS[category] ||
+  category
+    ?.split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ") ||
+  "";
