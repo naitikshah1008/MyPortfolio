@@ -7,13 +7,14 @@ import MainLayout from "./layouts/MainLayout";
 import {
   loadExperiencePage,
   loadProjectsPage,
+  loadSkillsPage,
 } from "./utils/routePreloaders";
 
 // Public Pages
 const Home = lazy(() => import("./pages/Home"));
 const Projects = lazy(loadProjectsPage);
 const ProjectDetail = lazy(() => import("./pages/ProjectDetail"));
-const Skills = lazy(() => import("./pages/Skills"));
+const Skills = lazy(loadSkillsPage);
 const Experience = lazy(loadExperiencePage);
 const CodingStats = lazy(() => import("./pages/CodingStats"));
 const Blog = lazy(() => import("./pages/Blog"));

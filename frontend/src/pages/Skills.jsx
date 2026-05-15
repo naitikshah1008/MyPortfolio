@@ -1,52 +1,20 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import api from "../utils/api";
 import toast from "react-hot-toast";
 import SkillCard from "../components/SkillCard";
-
-gsap.registerPlugin(ScrollTrigger);
+import { getCachedSkills, loadSkills } from "../utils/skills";
 
 const Skills = () => {
-  const [skills, setSkills] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [skills, setSkills] = useState(getCachedSkills);
+  const [loading, setLoading] = useState(skills.length === 0);
   const [activeCategory, setActiveCategory] = useState("all");
-  const skillsGridRef = useRef(null);
 
   useEffect(() => {
-    fetchSkills();
+    loadSkills()
+      .then(setSkills)
+      .catch(() => toast.error("Failed to load skills"))
+      .finally(() => setLoading(false));
   }, []);
-
-  const fetchSkills = async () => {
-    try {
-      const { data } = await api.get("/skills");
-      setSkills(data);
-    } catch (error) {
-      toast.error("Failed to load skills");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (!loading && skills.length > 0 && skillsGridRef.current) {
-      gsap.fromTo(".skill-item-gsap",
-        {
-          scale: 0.5,
-          opacity: 0,
-        },
-        {
-          scale: 1,
-          opacity: 1,
-          duration: 0.6,
-          stagger: 0.08,
-          ease: "back.out(1.7)",
-          clearProps: "all",
-        }
-      );
-    }
-  }, [loading, skills, activeCategory]);
 
   const categories = [
     { id: "all", label: "All Skills" },
@@ -129,11 +97,16 @@ const Skills = () => {
               </p>
             </div>
           ) : (
-            <div ref={skillsGridRef} className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {filteredSkills.map((skill, index) => (
-                <div key={skill._id} className="skill-item-gsap">
+                <motion.div
+                  key={skill._id}
+                  initial={{ opacity: 0, scale: 0.92 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.25, delay: index * 0.03 }}
+                >
                   <SkillCard skill={skill} />
-                </div>
+                </motion.div>
               ))}
             </div>
           )}

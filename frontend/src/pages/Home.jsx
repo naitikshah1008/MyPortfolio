@@ -14,10 +14,6 @@ import {
   loadHomepageData,
 } from "../utils/homepage";
 import useProfileStore from "../store/profileStore";
-import {
-  preloadExperienceView,
-  preloadProjectsView,
-} from "../utils/routePreloaders";
 
 const Home = () => {
   const [cachedHomepageData] = useState(getCachedHomepageData);
@@ -73,23 +69,6 @@ const Home = () => {
 
     fetchData();
   }, [cachedHomepageData, setProfile]);
-
-  useEffect(() => {
-    if (loading) return;
-
-    const preload = () => {
-      preloadProjectsView();
-      preloadExperienceView();
-    };
-
-    if ("requestIdleCallback" in window) {
-      const idleId = window.requestIdleCallback(preload);
-      return () => window.cancelIdleCallback(idleId);
-    }
-
-    const timeoutId = window.setTimeout(preload, 1200);
-    return () => window.clearTimeout(timeoutId);
-  }, [loading]);
 
   // GSAP ScrollTrigger animations
   useEffect(() => {

@@ -10,7 +10,13 @@ export const getSkills = async (req, res) => {
     let filter = {};
     if (category) filter.category = category;
 
-    const skills = await Skill.find(filter).sort({ order: 1, createdAt: -1 });
+    const skills = await Skill.find(filter)
+      .sort({ order: 1, createdAt: -1 })
+      .lean();
+    res.set(
+      "Cache-Control",
+      "public, max-age=60, s-maxage=300, stale-while-revalidate=86400"
+    );
     res.json(skills);
   } catch (error) {
     res.status(500).json({ message: error.message });
