@@ -75,10 +75,10 @@ export const updateContactStatus = async (req, res) => {
     const contact = await Contact.findById(req.params.id);
 
     if (contact) {
-      contact.status = req.body.status || contact.status;
+      if (req.body.status !== undefined) contact.status = req.body.status;
       contact.replied =
         req.body.replied !== undefined ? req.body.replied : contact.replied;
-      contact.notes = req.body.notes || contact.notes;
+      if (req.body.notes !== undefined) contact.notes = req.body.notes;
 
       const updatedContact = await contact.save();
       res.json(updatedContact);

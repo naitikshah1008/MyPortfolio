@@ -1,4 +1,5 @@
 import Skill from "../models/Skill.js";
+import { setCollectionCacheHeaders } from "../utils/cache.js";
 
 // @desc    Get all skills
 // @route   GET /api/skills
@@ -13,10 +14,7 @@ export const getSkills = async (req, res) => {
     const skills = await Skill.find(filter)
       .sort({ order: 1, createdAt: -1 })
       .lean();
-    res.set(
-      "Cache-Control",
-      "public, max-age=60, s-maxage=300, stale-while-revalidate=86400"
-    );
+    setCollectionCacheHeaders(req, res);
     res.json(skills);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -69,12 +67,14 @@ export const updateSkill = async (req, res) => {
     const skill = await Skill.findById(req.params.id);
 
     if (skill) {
-      skill.name = req.body.name || skill.name;
-      skill.category = req.body.category || skill.category;
+      if (req.body.name !== undefined) skill.name = req.body.name;
+      if (req.body.category !== undefined) skill.category = req.body.category;
       skill.level = req.body.level !== undefined ? req.body.level : skill.level;
-      skill.icon = req.body.icon || skill.icon;
-      skill.color = req.body.color || skill.color;
-      skill.description = req.body.description || skill.description;
+      if (req.body.icon !== undefined) skill.icon = req.body.icon;
+      if (req.body.color !== undefined) skill.color = req.body.color;
+      if (req.body.description !== undefined) {
+        skill.description = req.body.description;
+      }
 
       const updatedSkill = await skill.save();
       res.json(updatedSkill);

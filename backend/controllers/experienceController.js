@@ -1,4 +1,5 @@
 import Experience from "../models/Experience.js";
+import { setCollectionCacheHeaders } from "../utils/cache.js";
 
 // @desc    Get all experiences
 // @route   GET /api/experiences
@@ -9,10 +10,7 @@ export const getExperiences = async (req, res) => {
       startDate: -1,
       order: 1,
     }).lean();
-    res.set(
-      "Cache-Control",
-      "public, max-age=60, s-maxage=300, stale-while-revalidate=86400"
-    );
+    setCollectionCacheHeaders(req, res);
     res.json(experiences);
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });

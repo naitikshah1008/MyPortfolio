@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { FiSave, FiX } from "react-icons/fi";
 import toast from "react-hot-toast";
 import api from "../utils/api";
+import { invalidateHomepageCache } from "../utils/homepage";
+import { invalidateSkillsCache } from "../utils/skills";
 
 const SkillForm = ({ skill, onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
@@ -36,6 +38,8 @@ const SkillForm = ({ skill, onClose, onSuccess }) => {
         toast.success("Skill created successfully");
       }
 
+      invalidateSkillsCache();
+      invalidateHomepageCache();
       onSuccess();
       onClose();
     } catch (error) {

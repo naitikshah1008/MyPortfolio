@@ -63,15 +63,15 @@ const TimelineCard = ({ experience, index }) => {
             whileHover={{ y: -5 }}
             className="card p-6 hover:shadow-xl transition-all duration-300"
           >
-            {experience.companyLogo && (
+            {experience.icon && (
               <div
                 className={`flex ${
                   index % 2 === 0 ? "md:justify-end" : "md:justify-start"
                 } justify-start mb-4`}
               >
                 <img
-                  src={experience.companyLogo}
-                  alt={experience.company}
+                  src={experience.icon}
+                  alt={experience.organization || experience.title}
                   className="h-12 w-12 object-contain rounded"
                 />
               </div>
@@ -89,10 +89,10 @@ const TimelineCard = ({ experience, index }) => {
               </span>
             </div>
 
-            <h3 className="text-xl font-bold mb-1">{experience.position}</h3>
+            <h3 className="text-xl font-bold mb-1">{experience.title}</h3>
             <div className="flex items-center gap-2 mb-3 text-primary-600 dark:text-primary-400 font-semibold">
               <FiBriefcase size={16} />
-              <span>{experience.company}</span>
+              <span>{experience.organization}</span>
             </div>
 
             {experience.location && (

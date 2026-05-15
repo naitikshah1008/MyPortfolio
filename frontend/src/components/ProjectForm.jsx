@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { FiSave, FiX, FiUpload } from "react-icons/fi";
 import toast from "react-hot-toast";
 import api from "../utils/api";
+import { invalidateProjectsCache } from "../utils/projects";
+import { invalidateHomepageCache } from "../utils/homepage";
 
 const ProjectForm = ({ project, onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
@@ -15,6 +17,7 @@ const ProjectForm = ({ project, onClose, onSuccess }) => {
     links: {
       github: "",
       live: "",
+      demo: "",
     },
   });
   const [loading, setLoading] = useState(false);
@@ -34,6 +37,7 @@ const ProjectForm = ({ project, onClose, onSuccess }) => {
         links: {
           github: project.links?.github || "",
           live: project.links?.live || "",
+          demo: project.links?.demo || "",
         },
         projectDate: project.projectDate
           ? project.projectDate.slice(0, 10)
@@ -85,7 +89,11 @@ const ProjectForm = ({ project, onClose, onSuccess }) => {
     try {
       const payload = {
         ...formData,
-        techStack: formData.techStack.split(",").map((tech) => tech.trim()),
+        projectDate: formData.projectDate || null,
+        techStack: formData.techStack
+          .split(",")
+          .map((tech) => tech.trim())
+          .filter(Boolean),
       };
 
       if (project) {
@@ -96,6 +104,8 @@ const ProjectForm = ({ project, onClose, onSuccess }) => {
         toast.success("Project created successfully");
       }
 
+      invalidateProjectsCache();
+      invalidateHomepageCache();
       if (onSuccess) onSuccess();
       if (onClose) onClose();
     } catch (error) {
@@ -268,6 +278,22 @@ const ProjectForm = ({ project, onClose, onSuccess }) => {
           }
           className="input"
           placeholder="https://example.com"
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium mb-2">Demo Video URL</label>
+        <input
+          type="url"
+          value={formData.links.demo}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              links: { ...formData.links, demo: e.target.value },
+            })
+          }
+          className="input"
+          placeholder="https://www.loom.com/share/..."
         />
       </div>
 

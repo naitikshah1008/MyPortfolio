@@ -40,3 +40,8 @@ export const loadProjects = async () => {
 };
 
 export const prefetchProjects = () => loadProjects().catch(() => {});
+
+export const invalidateProjectsCache = () => {
+  projectsPromise = null;
+  localStorage.removeItem(PROJECTS_CACHE_KEY);
+};

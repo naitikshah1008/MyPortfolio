@@ -6,6 +6,8 @@ import api from "../../utils/api";
 import Modal from "../../components/Modal";
 import SkillForm from "../../components/SkillForm";
 import ConfirmDialog from "../../components/ConfirmDialog";
+import { invalidateHomepageCache } from "../../utils/homepage";
+import { invalidateSkillsCache } from "../../utils/skills";
 
 const Skills = () => {
   const [skills, setSkills] = useState([]);
@@ -51,6 +53,8 @@ const Skills = () => {
   const confirmDelete = async () => {
     try {
       await api.delete(`/skills/${skillToDelete}`);
+      invalidateSkillsCache();
+      invalidateHomepageCache();
       toast.success("Skill deleted successfully");
       fetchSkills();
     } catch (error) {
@@ -136,7 +140,10 @@ const Skills = () => {
               ? "No skills yet. Add your first skill!"
               : `No skills in ${filter} category.`}
           </p>
-          <button className="btn-primary inline-flex items-center gap-2">
+          <button
+            onClick={handleAdd}
+            className="btn-primary inline-flex items-center gap-2"
+          >
             <FiPlus /> Add Skill
           </button>
         </div>

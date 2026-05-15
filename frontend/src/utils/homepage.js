@@ -110,6 +110,10 @@ export const cacheHomepageData = (data) => {
   }
 };
 
+export const invalidateHomepageCache = () => {
+  localStorage.removeItem(HOME_CACHE_KEY);
+};
+
 export const loadHomepageData = async () => {
   try {
     const { data } = await api.get("/homepage");

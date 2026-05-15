@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { FiSave, FiX, FiUpload } from "react-icons/fi";
 import toast from "react-hot-toast";
 import api from "../utils/api";
+import { invalidateExperiencesCache } from "../utils/experiences";
+import { invalidateHomepageCache } from "../utils/homepage";
 
 const ExperienceForm = ({ experience, onSuccess, onCancel }) => {
   const [formData, setFormData] = useState({
@@ -74,6 +76,7 @@ const ExperienceForm = ({ experience, onSuccess, onCancel }) => {
     try {
       const experienceData = {
         ...formData,
+        endDate: formData.current ? null : formData.endDate || null,
         technologies: formData.technologies
           .split(",")
           .map((t) => t.trim())
@@ -92,6 +95,8 @@ const ExperienceForm = ({ experience, onSuccess, onCancel }) => {
         toast.success("Experience added successfully");
       }
 
+      invalidateExperiencesCache();
+      invalidateHomepageCache();
       onSuccess();
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to save experience");

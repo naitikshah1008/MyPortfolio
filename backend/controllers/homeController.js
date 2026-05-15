@@ -3,6 +3,7 @@ import Experience from "../models/Experience.js";
 import Skill from "../models/Skill.js";
 import User from "../models/User.js";
 import CodingProfile from "../models/CodingProfile.js";
+import { setCollectionCacheHeaders } from "../utils/cache.js";
 
 const fallbackOwnerProfile = {
   name: "Naitik Shah",
@@ -70,10 +71,7 @@ export const getHomepageData = async (req, res) => {
 
     const yearsExperience = Math.max(1, Math.floor(totalMonths / 12));
 
-    res.set(
-      "Cache-Control",
-      "public, max-age=60, s-maxage=300, stale-while-revalidate=86400"
-    );
+    setCollectionCacheHeaders(req, res);
 
     res.json({
       ownerProfile: owner || fallbackOwnerProfile,

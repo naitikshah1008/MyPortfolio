@@ -42,3 +42,8 @@ export const loadBlogs = async () => {
 };
 
 export const prefetchBlogs = () => loadBlogs().catch(() => {});
+
+export const invalidateBlogsCache = () => {
+  blogsPromise = null;
+  localStorage.removeItem(BLOGS_CACHE_KEY);
+};

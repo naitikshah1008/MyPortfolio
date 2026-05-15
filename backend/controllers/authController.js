@@ -101,14 +101,16 @@ export const updateUserProfile = async (req, res) => {
     const user = await User.findById(req.user._id);
 
     if (user) {
-      user.name = req.body.name || user.name;
-      user.email = req.body.email || user.email;
-      user.avatar = req.body.avatar || user.avatar;
-      user.title = req.body.title || user.title;
-      user.bio = req.body.bio || user.bio;
-      user.github = req.body.github || user.github;
-      user.linkedin = req.body.linkedin || user.linkedin;
-      user.hackerrank = req.body.hackerrank || user.hackerrank;
+      if (req.body.name !== undefined) user.name = req.body.name;
+      if (req.body.email !== undefined) user.email = req.body.email;
+      if (req.body.avatar !== undefined) user.avatar = req.body.avatar;
+      if (req.body.title !== undefined) user.title = req.body.title;
+      if (req.body.bio !== undefined) user.bio = req.body.bio;
+      if (req.body.github !== undefined) user.github = req.body.github;
+      if (req.body.linkedin !== undefined) user.linkedin = req.body.linkedin;
+      if (req.body.hackerrank !== undefined) {
+        user.hackerrank = req.body.hackerrank;
+      }
 
       // Update roles if provided
       if (req.body.roles !== undefined) {
@@ -132,6 +134,9 @@ export const updateUserProfile = async (req, res) => {
         github: updatedUser.github,
         linkedin: updatedUser.linkedin,
         hackerrank: updatedUser.hackerrank,
+        resume: updatedUser.resume,
+        profileImage: updatedUser.profileImage,
+        codingProfiles: updatedUser.codingProfiles,
         roles: updatedUser.roles,
         token: generateToken(updatedUser._id),
       });

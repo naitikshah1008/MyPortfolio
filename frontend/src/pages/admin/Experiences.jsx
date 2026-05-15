@@ -6,6 +6,8 @@ import api from "../../utils/api";
 import Modal from "../../components/Modal";
 import ExperienceForm from "../../components/ExperienceForm";
 import ConfirmDialog from "../../components/ConfirmDialog";
+import { invalidateExperiencesCache } from "../../utils/experiences";
+import { invalidateHomepageCache } from "../../utils/homepage";
 
 const Experiences = () => {
   const [experiences, setExperiences] = useState([]);
@@ -38,6 +40,8 @@ const Experiences = () => {
   const confirmDelete = async () => {
     try {
       await api.delete(`/experiences/${experienceToDelete}`);
+      invalidateExperiencesCache();
+      invalidateHomepageCache();
       toast.success("Experience deleted successfully");
       fetchExperiences();
     } catch (error) {
@@ -122,17 +126,17 @@ const Experiences = () => {
             >
               <div className="flex items-start justify-between">
                 <div className="flex gap-4 flex-1">
-                  {exp.companyLogo && (
+                  {exp.icon && (
                     <img
-                      src={exp.companyLogo}
-                      alt={exp.company}
+                      src={exp.icon}
+                      alt={exp.organization || exp.title}
                       className="h-12 w-12 object-contain rounded"
                     />
                   )}
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold mb-1">{exp.position}</h3>
+                    <h3 className="text-xl font-bold mb-1">{exp.title}</h3>
                     <p className="text-primary-600 dark:text-primary-400 font-semibold mb-2">
-                      {exp.company}
+                      {exp.organization}
                     </p>
 
                     <div className="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-400 mb-3">

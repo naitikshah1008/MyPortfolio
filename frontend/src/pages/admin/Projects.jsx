@@ -6,6 +6,8 @@ import api from "../../utils/api";
 import Modal from "../../components/Modal";
 import ProjectForm from "../../components/ProjectForm";
 import ConfirmDialog from "../../components/ConfirmDialog";
+import { invalidateProjectsCache } from "../../utils/projects";
+import { invalidateHomepageCache } from "../../utils/homepage";
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
@@ -38,11 +40,14 @@ const Projects = () => {
   const confirmDelete = async () => {
     try {
       await api.delete(`/projects/${projectToDelete}`);
+      invalidateProjectsCache();
+      invalidateHomepageCache();
       toast.success("Project deleted successfully");
       fetchProjects();
     } catch (error) {
       toast.error("Failed to delete project");
     } finally {
+      setShowConfirm(false);
       setProjectToDelete(null);
     }
   };

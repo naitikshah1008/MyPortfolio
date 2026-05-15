@@ -16,6 +16,11 @@ const router = express.Router();
 // @access  Public
 router.get("/", getBlogs);
 
+// @route   GET /api/blogs/admin/all
+// @desc    Get all blogs including drafts
+// @access  Private/Admin
+router.get("/admin/all", protect, admin, getBlogs);
+
 // @route   GET /api/blogs/:slug
 // @desc    Get single blog by slug
 // @access  Public

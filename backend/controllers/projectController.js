@@ -1,4 +1,5 @@
 import Project from "../models/Project.js";
+import { setCollectionCacheHeaders } from "../utils/cache.js";
 
 // @desc    Get all projects
 // @route   GET /api/projects
@@ -32,10 +33,7 @@ export const getProjects = async (req, res) => {
     }
 
     const projects = await query.lean();
-    res.set(
-      "Cache-Control",
-      "public, max-age=60, s-maxage=300, stale-while-revalidate=86400"
-    );
+    setCollectionCacheHeaders(req, res);
     res.json(projects);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -94,20 +92,32 @@ export const updateProject = async (req, res) => {
     const project = await Project.findById(req.params.id);
 
     if (project) {
-      project.title = req.body.title || project.title;
-      project.description = req.body.description || project.description;
-      project.fullDescription =
-        req.body.fullDescription || project.fullDescription;
-      project.image = req.body.image || project.image;
-      project.images = req.body.images || project.images;
-      project.techStack = req.body.techStack || project.techStack;
-      project.category = req.body.category || project.category;
-      project.links = req.body.links || project.links;
+      if (req.body.title !== undefined) project.title = req.body.title;
+      if (req.body.description !== undefined) {
+        project.description = req.body.description;
+      }
+      if (req.body.fullDescription !== undefined) {
+        project.fullDescription = req.body.fullDescription;
+      }
+      if (req.body.image !== undefined) project.image = req.body.image;
+      if (req.body.images !== undefined) project.images = req.body.images;
+      if (req.body.techStack !== undefined) {
+        project.techStack = req.body.techStack;
+      }
+      if (req.body.category !== undefined) project.category = req.body.category;
+      if (req.body.links !== undefined) {
+        project.links = {
+          ...(project.links?.toObject?.() || project.links || {}),
+          ...req.body.links,
+        };
+      }
       project.featured =
         req.body.featured !== undefined ? req.body.featured : project.featured;
-      project.status = req.body.status || project.status;
-      project.tags = req.body.tags || project.tags;
-      project.projectDate = req.body.projectDate || project.projectDate;
+      if (req.body.status !== undefined) project.status = req.body.status;
+      if (req.body.tags !== undefined) project.tags = req.body.tags;
+      if (req.body.projectDate !== undefined) {
+        project.projectDate = req.body.projectDate;
+      }
 
       const updatedProject = await project.save();
       res.json(updatedProject);

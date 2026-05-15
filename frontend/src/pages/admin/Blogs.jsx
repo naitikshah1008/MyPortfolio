@@ -6,6 +6,7 @@ import api from "../../utils/api";
 import Modal from "../../components/Modal";
 import BlogForm from "../../components/BlogForm";
 import ConfirmDialog from "../../components/ConfirmDialog";
+import { invalidateBlogsCache } from "../../utils/blogs";
 
 const Blogs = () => {
   const [blogs, setBlogs] = useState([]);
@@ -21,7 +22,9 @@ const Blogs = () => {
 
   const fetchBlogs = async () => {
     try {
-      const { data } = await api.get("/blogs");
+      const { data } = await api.get("/blogs/admin/all", {
+        params: { published: false },
+      });
       setBlogs(data);
     } catch (error) {
       toast.error("Failed to load blogs");
@@ -38,6 +41,7 @@ const Blogs = () => {
   const confirmDelete = async () => {
     try {
       await api.delete(`/blogs/${blogToDelete}`);
+      invalidateBlogsCache();
       toast.success("Blog deleted successfully");
       fetchBlogs();
     } catch (error) {
@@ -51,6 +55,7 @@ const Blogs = () => {
   const togglePublish = async (id, currentStatus) => {
     try {
       await api.put(`/blogs/${id}`, { published: !currentStatus });
+      invalidateBlogsCache();
       toast.success(currentStatus ? "Blog unpublished" : "Blog published");
       fetchBlogs();
     } catch (error) {

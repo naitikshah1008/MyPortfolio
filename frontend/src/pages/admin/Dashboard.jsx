@@ -29,7 +29,7 @@ const Dashboard = () => {
       const [projects, skills, blogs, contacts] = await Promise.all([
         api.get("/projects"),
         api.get("/skills"),
-        api.get("/blogs"),
+        api.get("/blogs/admin/all", { params: { published: false } }),
         api.get("/contacts"),
       ]);
 

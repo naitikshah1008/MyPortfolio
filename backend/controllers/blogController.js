@@ -1,4 +1,5 @@
 import Blog from "../models/Blog.js";
+import { setCollectionCacheHeaders } from "../utils/cache.js";
 
 // @desc    Get all blogs
 // @route   GET /api/blogs
@@ -6,11 +7,13 @@ import Blog from "../models/Blog.js";
 export const getBlogs = async (req, res) => {
   try {
     const { published, category, tag, search, summary } = req.query;
+    const isAdminRequest = req.user?.role === "admin";
 
     let filter = {};
 
-    // Only show published blogs to public
-    if (published !== "false") filter.published = true;
+    // Public callers only ever see published posts. Admin callers can request
+    // drafts through the protected admin route.
+    if (!isAdminRequest || published !== "false") filter.published = true;
     if (category) filter.category = category;
     if (tag) filter.tags = { $in: [tag] };
     if (search) {
@@ -33,11 +36,8 @@ export const getBlogs = async (req, res) => {
 
     const blogs = await query.lean();
 
-    if (published !== "false" && !category && !tag && !search) {
-      res.set(
-        "Cache-Control",
-        "public, max-age=60, s-maxage=300, stale-while-revalidate=86400"
-      );
+    if (!category && !tag && !search) {
+      setCollectionCacheHeaders(req, res);
     }
 
     res.json(blogs);
@@ -54,11 +54,17 @@ export const getBlogBySlug = async (req, res) => {
     const { slug } = req.params;
 
     // Try to find by slug first
-    let blog = await Blog.findOne({ slug }).populate("author", "name avatar");
+    let blog = await Blog.findOne({ slug, published: true }).populate(
+      "author",
+      "name avatar"
+    );
 
     // If not found by slug, try by ID (for backward compatibility)
     if (!blog && slug.match(/^[0-9a-fA-F]{24}$/)) {
-      blog = await Blog.findById(slug).populate("author", "name avatar");
+      blog = await Blog.findOne({ _id: slug, published: true }).populate(
+        "author",
+        "name avatar"
+      );
     }
 
     if (blog) {
@@ -103,15 +109,17 @@ export const updateBlog = async (req, res) => {
     const blog = await Blog.findById(req.params.id);
 
     if (blog) {
-      blog.title = req.body.title || blog.title;
-      blog.excerpt = req.body.excerpt || blog.excerpt;
-      blog.content = req.body.content || blog.content;
-      blog.coverImage = req.body.coverImage || req.body.image || blog.coverImage;
-      blog.tags = req.body.tags || blog.tags;
-      blog.category = req.body.category || blog.category;
+      if (req.body.title !== undefined) blog.title = req.body.title;
+      if (req.body.excerpt !== undefined) blog.excerpt = req.body.excerpt;
+      if (req.body.content !== undefined) blog.content = req.body.content;
+      if (req.body.coverImage !== undefined || req.body.image !== undefined) {
+        blog.coverImage = req.body.coverImage ?? req.body.image;
+      }
+      if (req.body.tags !== undefined) blog.tags = req.body.tags;
+      if (req.body.category !== undefined) blog.category = req.body.category;
       blog.published =
         req.body.published !== undefined ? req.body.published : blog.published;
-      blog.readTime = req.body.readTime || blog.readTime;
+      if (req.body.readTime !== undefined) blog.readTime = req.body.readTime;
 
       const updatedBlog = await blog.save();
       res.json(updatedBlog);

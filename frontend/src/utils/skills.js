@@ -30,3 +30,8 @@ export const loadSkills = async () => {
 };
 
 export const prefetchSkills = () => loadSkills().catch(() => {});
+
+export const invalidateSkillsCache = () => {
+  skillsPromise = null;
+  localStorage.removeItem(SKILLS_CACHE_KEY);
+};

@@ -30,3 +30,8 @@ export const loadExperiences = async () => {
 };
 
 export const prefetchExperiences = () => loadExperiences().catch(() => {});
+
+export const invalidateExperiencesCache = () => {
+  experiencesPromise = null;
+  localStorage.removeItem(EXPERIENCES_CACHE_KEY);
+};

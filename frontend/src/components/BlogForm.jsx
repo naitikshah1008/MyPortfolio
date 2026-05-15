@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { FiSave, FiX, FiUpload, FiImage } from "react-icons/fi";
 import toast from "react-hot-toast";
 import api from "../utils/api";
+import { invalidateBlogsCache } from "../utils/blogs";
 
 const BlogForm = ({ blog, onCancel, onSuccess }) => {
   const [formData, setFormData] = useState({
@@ -85,6 +86,7 @@ const BlogForm = ({ blog, onCancel, onSuccess }) => {
         toast.success("Blog created successfully");
       }
 
+      invalidateBlogsCache();
       // Call callbacks after successful operation
       if (onSuccess) onSuccess();
     } catch (error) {

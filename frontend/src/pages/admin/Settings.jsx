@@ -17,6 +17,8 @@ import api from "../../utils/api";
 import toast from "react-hot-toast";
 import Modal from "../../components/Modal";
 import ProfileForm from "../../components/ProfileForm";
+import useProfileStore from "../../store/profileStore";
+import { invalidateHomepageCache } from "../../utils/homepage";
 
 const Settings = () => {
   const [profile, setProfile] = useState(null);
@@ -38,6 +40,7 @@ const Settings = () => {
   const [changingPassword, setChangingPassword] = useState(false);
   const resumeInputRef = useRef(null);
   const imageInputRef = useRef(null);
+  const setPublicProfile = useProfileStore((state) => state.setProfile);
 
   useEffect(() => {
     fetchProfile();
@@ -58,6 +61,8 @@ const Settings = () => {
     try {
       const response = await api.put("/auth/profile", formData);
       setProfile(response.data);
+      setPublicProfile(response.data);
+      invalidateHomepageCache();
       return response.data;
     } catch (error) {
       throw error;
@@ -97,6 +102,11 @@ const Settings = () => {
         ...profile,
         resume: data,
       });
+      setPublicProfile({
+        ...profile,
+        resume: data,
+      });
+      invalidateHomepageCache();
       toast.success("Resume uploaded successfully");
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to upload resume");
@@ -134,6 +144,11 @@ const Settings = () => {
         ...profile,
         profileImage: data,
       });
+      setPublicProfile({
+        ...profile,
+        profileImage: data,
+      });
+      invalidateHomepageCache();
       toast.success("Profile image uploaded successfully");
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to upload image");
@@ -151,6 +166,11 @@ const Settings = () => {
         ...profile,
         profileImage: null,
       });
+      setPublicProfile({
+        ...profile,
+        profileImage: null,
+      });
+      invalidateHomepageCache();
       toast.success("Profile image removed successfully");
     } catch (error) {
       toast.error("Failed to remove profile image");
