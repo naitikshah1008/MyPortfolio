@@ -5,7 +5,7 @@ import Project from "../models/Project.js";
 // @access  Public
 export const getProjects = async (req, res) => {
   try {
-    const { category, featured, search } = req.query;
+    const { category, featured, search, summary } = req.query;
 
     let filter = {};
 
@@ -19,11 +19,23 @@ export const getProjects = async (req, res) => {
       ];
     }
 
-    const projects = await Project.find(filter).sort({
+    const query = Project.find(filter).sort({
       order: 1,
       projectDate: -1,
       createdAt: -1,
     });
+
+    if (summary === "true") {
+      query.select(
+        "title description image techStack category links featured order projectDate createdAt"
+      );
+    }
+
+    const projects = await query.lean();
+    res.set(
+      "Cache-Control",
+      "public, max-age=60, s-maxage=300, stale-while-revalidate=86400"
+    );
     res.json(projects);
   } catch (error) {
     res.status(500).json({ message: error.message });

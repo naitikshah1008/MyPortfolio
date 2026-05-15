@@ -1,7 +1,5 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   FiBriefcase,
   FiCalendar,
@@ -14,52 +12,22 @@ import {
   FiStar,
   FiPackage,
 } from "react-icons/fi";
-import api from "../utils/api";
 import toast from "react-hot-toast";
-
-gsap.registerPlugin(ScrollTrigger);
+import {
+  getCachedExperiences,
+  loadExperiences,
+} from "../utils/experiences";
 
 const Experience = () => {
-  const [experiences, setExperiences] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const timelineRef = useRef(null);
+  const [experiences, setExperiences] = useState(getCachedExperiences);
+  const [loading, setLoading] = useState(experiences.length === 0);
 
   useEffect(() => {
-    const fetchExperiences = async () => {
-      try {
-        const { data } = await api.get("/experiences");
-        setExperiences(data);
-      } catch (error) {
-        toast.error("Failed to load experiences");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchExperiences();
+    loadExperiences()
+      .then(setExperiences)
+      .catch(() => toast.error("Failed to load experiences"))
+      .finally(() => setLoading(false));
   }, []);
-
-  useEffect(() => {
-    if (!loading && experiences.length > 0 && timelineRef.current) {
-      gsap.fromTo(".experience-card-gsap",
-        {
-          x: (index) => (index % 2 === 0 ? -100 : 100),
-          opacity: 0,
-        },
-        {
-          scrollTrigger: {
-            trigger: timelineRef.current,
-            start: "top 80%",
-          },
-          x: 0,
-          opacity: 1,
-          duration: 0.8,
-          stagger: 0.2,
-          ease: "power3.out",
-          clearProps: "all",
-        }
-      );
-    }
-  }, [loading, experiences]);
 
   // Format date to readable format
   const formatDate = (dateString) => {
@@ -165,15 +133,21 @@ const Experience = () => {
                     </div>
 
                     {/* Zigzag Timeline */}
-                    <div ref={timelineRef} className="relative">
+                    <div className="relative">
                       {/* Center Vertical Line - Hidden on mobile, shown on desktop */}
                       <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-gray-300 dark:from-dark-600 to-transparent transform -translate-x-1/2"></div>
 
                       {categoryExps.map((exp, index) => {
                         const isLeft = index % 2 === 0;
                         return (
-                          <div
+                          <motion.div
                             key={exp._id}
+                            initial={{ opacity: 0, x: isLeft ? -24 : 24 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{
+                              duration: 0.35,
+                              delay: index * 0.05,
+                            }}
                             className={`experience-card-gsap relative mb-8 last:mb-0 md:w-1/2 ${
                               isLeft ? "md:pr-8" : "md:ml-auto md:pl-8"
                             }`}
@@ -315,7 +289,7 @@ const Experience = () => {
                                   </div>
                                 )}
                             </motion.div>
-                          </div>
+                          </motion.div>
                         );
                       })}
                     </div>

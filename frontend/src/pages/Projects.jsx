@@ -1,56 +1,27 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import api from "../utils/api";
 import toast from "react-hot-toast";
 import ProjectCard from "../components/ProjectCard";
 import { PROJECT_CATEGORIES, formatProjectCategory } from "../utils/constants";
-
-gsap.registerPlugin(ScrollTrigger);
+import { getCachedProjects, loadProjects } from "../utils/projects";
 
 const Projects = () => {
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [projects, setProjects] = useState(getCachedProjects);
+  const [loading, setLoading] = useState(projects.length === 0);
   const [filter, setFilter] = useState("all");
-  const projectsGridRef = useRef(null);
 
   useEffect(() => {
-    fetchProjects();
-  }, [filter]);
-
-  const fetchProjects = async () => {
-    try {
-      const params = filter !== "all" ? { category: filter } : {};
-      const { data } = await api.get("/projects", { params });
-      setProjects(data);
-    } catch (error) {
-      toast.error("Failed to load projects");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (!loading && projects.length > 0 && projectsGridRef.current) {
-      gsap.fromTo(".project-item-gsap",
-        {
-          y: 80,
-          opacity: 0,
-        },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          stagger: 0.15,
-          ease: "power3.out",
-          clearProps: "all",
-        }
-      );
-    }
-  }, [loading, projects, filter]);
+    loadProjects()
+      .then(setProjects)
+      .catch(() => toast.error("Failed to load projects"))
+      .finally(() => setLoading(false));
+  }, []);
 
   const categories = ["all", ...PROJECT_CATEGORIES];
+  const visibleProjects =
+    filter === "all"
+      ? projects
+      : projects.filter((project) => project.category === filter);
 
   return (
     <div className="min-h-screen pt-20">
@@ -98,18 +69,23 @@ const Projects = () => {
                 </div>
               ))}
             </div>
-          ) : projects.length === 0 ? (
+          ) : visibleProjects.length === 0 ? (
             <div className="text-center py-20">
               <p className="text-gray-600 dark:text-gray-400">
                 No projects found in this category.
               </p>
             </div>
           ) : (
-            <div ref={projectsGridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {projects.map((project, index) => (
-                <div key={project._id} className="project-item-gsap">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {visibleProjects.map((project, index) => (
+                <motion.div
+                  key={project._id}
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.35, delay: index * 0.05 }}
+                >
                   <ProjectCard project={project} />
-                </div>
+                </motion.div>
               ))}
             </div>
           )}

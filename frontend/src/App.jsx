@@ -4,13 +4,17 @@ import useThemeStore from "./store/themeStore";
 
 // Layouts
 import MainLayout from "./layouts/MainLayout";
+import {
+  loadExperiencePage,
+  loadProjectsPage,
+} from "./utils/routePreloaders";
 
 // Public Pages
 const Home = lazy(() => import("./pages/Home"));
-const Projects = lazy(() => import("./pages/Projects"));
+const Projects = lazy(loadProjectsPage);
 const ProjectDetail = lazy(() => import("./pages/ProjectDetail"));
 const Skills = lazy(() => import("./pages/Skills"));
-const Experience = lazy(() => import("./pages/Experience"));
+const Experience = lazy(loadExperiencePage);
 const CodingStats = lazy(() => import("./pages/CodingStats"));
 const Blog = lazy(() => import("./pages/Blog"));
 const BlogDetail = lazy(() => import("./pages/BlogDetail"));

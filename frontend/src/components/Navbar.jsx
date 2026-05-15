@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiMenu, FiX, FiSun, FiMoon } from "react-icons/fi";
 import useThemeStore from "../store/themeStore";
+import { preloadViewForPath } from "../utils/routePreloaders";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -71,6 +72,8 @@ const Navbar = () => {
                 <Link
                   key={link.path}
                   to={link.path}
+                  onMouseEnter={() => preloadViewForPath(link.path)}
+                  onFocus={() => preloadViewForPath(link.path)}
                   className={`relative font-medium transition-colors duration-200 ${
                     isActive(link.path)
                       ? "text-primary-600 dark:text-primary-400"
@@ -137,6 +140,8 @@ const Navbar = () => {
                     <Link
                       key={link.path}
                       to={link.path}
+                      onTouchStart={() => preloadViewForPath(link.path)}
+                      onFocus={() => preloadViewForPath(link.path)}
                       onClick={() => setIsOpen(false)}
                       className={`block px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
                         isActive(link.path)
