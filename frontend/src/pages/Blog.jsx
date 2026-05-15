@@ -3,28 +3,19 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FiCalendar, FiEye } from "react-icons/fi";
 import toast from "react-hot-toast";
-import api from "../utils/api";
+import { getCachedBlogs, loadBlogs } from "../utils/blogs";
 
 const Blog = () => {
-  const [blogs, setBlogs] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [blogs, setBlogs] = useState(getCachedBlogs);
+  const [loading, setLoading] = useState(blogs.length === 0);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    fetchBlogs();
+    loadBlogs()
+      .then(setBlogs)
+      .catch(() => toast.error("Failed to load blogs"))
+      .finally(() => setLoading(false));
   }, []);
-
-  const fetchBlogs = async () => {
-    try {
-      const { data } = await api.get("/blogs");
-      // Only show published blogs
-      setBlogs(data.filter((blog) => blog.published));
-    } catch (error) {
-      toast.error("Failed to load blogs");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const filteredBlogs = blogs.filter(
     (blog) =>
@@ -89,61 +80,65 @@ const Blog = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredBlogs.map((blog, index) => (
-              <motion.div
-                key={blog._id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Link
-                  to={`/blog/${blog.slug || blog._id}`}
-                  className="block group"
+            {filteredBlogs.map((blog, index) => {
+              const coverImage = blog.coverImage || blog.image;
+
+              return (
+                <motion.div
+                  key={blog._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
                 >
-                  <div className="card overflow-hidden h-full hover:shadow-2xl transition-all duration-300">
-                    {blog.image && (
-                      <div className="relative h-48 overflow-hidden">
-                        <img
-                          src={blog.image}
-                          alt={blog.title}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                        />
-                      </div>
-                    )}
-                    <div className="p-6">
-                      <h2 className="text-2xl font-bold font-display mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-                        {blog.title}
-                      </h2>
-                      <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-3">
-                        {blog.excerpt}
-                      </p>
-                      <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 mb-4">
-                        <div className="flex items-center gap-1">
-                          <FiCalendar size={14} />
-                          {new Date(blog.createdAt).toLocaleDateString()}
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <FiEye size={14} />
-                          {blog.views || 0}
-                        </div>
-                      </div>
-                      {blog.tags && blog.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-2">
-                          {blog.tags.slice(0, 3).map((tag, i) => (
-                            <span
-                              key={i}
-                              className="px-2 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-xs rounded"
-                            >
-                              #{tag}
-                            </span>
-                          ))}
+                  <Link
+                    to={`/blog/${blog.slug || blog._id}`}
+                    className="block group"
+                  >
+                    <div className="card overflow-hidden h-full hover:shadow-2xl transition-all duration-300">
+                      {coverImage && (
+                        <div className="relative h-48 overflow-hidden">
+                          <img
+                            src={coverImage}
+                            alt={blog.title}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                          />
                         </div>
                       )}
+                      <div className="p-6">
+                        <h2 className="text-2xl font-bold font-display mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                          {blog.title}
+                        </h2>
+                        <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-3">
+                          {blog.excerpt}
+                        </p>
+                        <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 mb-4">
+                          <div className="flex items-center gap-1">
+                            <FiCalendar size={14} />
+                            {new Date(blog.createdAt).toLocaleDateString()}
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <FiEye size={14} />
+                            {blog.views || 0}
+                          </div>
+                        </div>
+                        {blog.tags && blog.tags.length > 0 && (
+                          <div className="flex flex-wrap gap-2">
+                            {blog.tags.slice(0, 3).map((tag, i) => (
+                              <span
+                                key={i}
+                                className="px-2 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-xs rounded"
+                              >
+                                #{tag}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
+                  </Link>
+                </motion.div>
+              );
+            })}
           </div>
         )}
       </div>

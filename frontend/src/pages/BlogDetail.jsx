@@ -141,7 +141,7 @@ const BlogDetail = () => {
           </motion.div>
 
           {/* Featured Image */}
-          {blog.image && (
+          {(blog.coverImage || blog.image) && (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -149,7 +149,7 @@ const BlogDetail = () => {
               className="mb-12"
             >
               <img
-                src={blog.image}
+                src={blog.coverImage || blog.image}
                 alt={blog.title}
                 className="w-full h-[500px] object-cover rounded-2xl shadow-2xl"
               />

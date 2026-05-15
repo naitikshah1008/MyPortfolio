@@ -5,7 +5,7 @@ import Blog from "../models/Blog.js";
 // @access  Public
 export const getBlogs = async (req, res) => {
   try {
-    const { published, category, tag, search } = req.query;
+    const { published, category, tag, search, summary } = req.query;
 
     let filter = {};
 
@@ -21,9 +21,24 @@ export const getBlogs = async (req, res) => {
       ];
     }
 
-    const blogs = await Blog.find(filter)
-      .populate("author", "name avatar")
-      .sort({ createdAt: -1 });
+    let query = Blog.find(filter).sort({ createdAt: -1 });
+
+    if (summary === "true") {
+      query = query.select(
+        "title slug excerpt coverImage image tags published views createdAt"
+      );
+    } else {
+      query = query.populate("author", "name avatar");
+    }
+
+    const blogs = await query.lean();
+
+    if (published !== "false" && !category && !tag && !search) {
+      res.set(
+        "Cache-Control",
+        "public, max-age=60, s-maxage=300, stale-while-revalidate=86400"
+      );
+    }
 
     res.json(blogs);
   } catch (error) {
@@ -65,7 +80,7 @@ export const createBlog = async (req, res) => {
       title: req.body.title,
       excerpt: req.body.excerpt,
       content: req.body.content,
-      coverImage: req.body.coverImage || "",
+      coverImage: req.body.coverImage || req.body.image || "",
       author: req.user._id,
       tags: req.body.tags || [],
       category: req.body.category || "general",
@@ -91,7 +106,7 @@ export const updateBlog = async (req, res) => {
       blog.title = req.body.title || blog.title;
       blog.excerpt = req.body.excerpt || blog.excerpt;
       blog.content = req.body.content || blog.content;
-      blog.coverImage = req.body.coverImage || blog.coverImage;
+      blog.coverImage = req.body.coverImage || req.body.image || blog.coverImage;
       blog.tags = req.body.tags || blog.tags;
       blog.category = req.body.category || blog.category;
       blog.published =

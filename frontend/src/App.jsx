@@ -5,6 +5,7 @@ import useThemeStore from "./store/themeStore";
 // Layouts
 import MainLayout from "./layouts/MainLayout";
 import {
+  loadBlogPage,
   loadExperiencePage,
   loadProjectsPage,
   loadSkillsPage,
@@ -17,7 +18,7 @@ const ProjectDetail = lazy(() => import("./pages/ProjectDetail"));
 const Skills = lazy(loadSkillsPage);
 const Experience = lazy(loadExperiencePage);
 const CodingStats = lazy(() => import("./pages/CodingStats"));
-const Blog = lazy(() => import("./pages/Blog"));
+const Blog = lazy(loadBlogPage);
 const BlogDetail = lazy(() => import("./pages/BlogDetail"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Login = lazy(() => import("./pages/Login"));

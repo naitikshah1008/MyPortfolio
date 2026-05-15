@@ -8,7 +8,7 @@ const BlogForm = ({ blog, onCancel, onSuccess }) => {
     title: "",
     excerpt: "",
     content: "",
-    image: "",
+    coverImage: "",
     tags: "",
     published: false,
   });
@@ -22,7 +22,7 @@ const BlogForm = ({ blog, onCancel, onSuccess }) => {
         title: blog.title || "",
         excerpt: blog.excerpt || "",
         content: blog.content || "",
-        image: blog.image || "",
+        coverImage: blog.coverImage || blog.image || "",
         tags: blog.tags?.join(", ") || "",
         published: blog.published || false,
       });
@@ -55,7 +55,7 @@ const BlogForm = ({ blog, onCancel, onSuccess }) => {
           "Content-Type": "multipart/form-data",
         },
       });
-      setFormData({ ...formData, image: data.url });
+      setFormData({ ...formData, coverImage: data.url });
       toast.success("Image uploaded successfully");
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to upload image");
@@ -166,18 +166,18 @@ const BlogForm = ({ blog, onCancel, onSuccess }) => {
             </button>
             <input
               type="url"
-              value={formData.image}
+              value={formData.coverImage}
               onChange={(e) =>
-                setFormData({ ...formData, image: e.target.value })
+                setFormData({ ...formData, coverImage: e.target.value })
               }
               className="input flex-1"
               placeholder="Or paste image URL"
             />
           </div>
-          {formData.image && (
+          {formData.coverImage && (
             <div className="relative">
               <img
-                src={formData.image}
+                src={formData.coverImage}
                 alt="Preview"
                 className="w-full h-48 object-cover rounded-lg"
                 onError={(e) => {
@@ -186,7 +186,7 @@ const BlogForm = ({ blog, onCancel, onSuccess }) => {
               />
               <button
                 type="button"
-                onClick={() => setFormData({ ...formData, image: "" })}
+                onClick={() => setFormData({ ...formData, coverImage: "" })}
                 className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors"
               >
                 <FiX size={16} />
