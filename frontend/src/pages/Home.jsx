@@ -1,43 +1,52 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import {
-  FiGithub,
-  FiLinkedin,
-  FiMail,
-  FiArrowDown,
-  FiArrowRight,
-} from "react-icons/fi";
+import { FiArrowRight } from "react-icons/fi";
 import { useEffect, useState, useRef } from "react";
-import api from "../utils/api";
 import toast from "react-hot-toast";
 import Hero from "../components/Hero";
 import ProjectCard from "../components/ProjectCard";
 import SkillCard from "../components/SkillCard";
 import CodingProfilesSection from "../components/CodingProfilesSection";
 import { loadGsapWithScrollTrigger } from "../utils/animations";
+import {
+  cacheHomepageData,
+  getCachedHomepageData,
+  loadHomepageData,
+} from "../utils/homepage";
+import useProfileStore from "../store/profileStore";
 
 const Home = () => {
-  const [featuredProjects, setFeaturedProjects] = useState([]);
-  const [skills, setSkills] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState({
-    totalProjects: 0,
-    yearsExperience: 0,
-  });
-  const [ownerProfile, setOwnerProfile] = useState(null);
-  const [codingProfiles, setCodingProfiles] = useState([]);
+  const [cachedHomepageData] = useState(getCachedHomepageData);
+  const [featuredProjects, setFeaturedProjects] = useState(
+    cachedHomepageData?.featuredProjects || []
+  );
+  const [skills, setSkills] = useState(cachedHomepageData?.skills || []);
+  const [loading, setLoading] = useState(!cachedHomepageData);
+  const [stats, setStats] = useState(
+    cachedHomepageData?.stats || {
+      totalProjects: 0,
+      yearsExperience: 0,
+    }
+  );
+  const [codingProfiles, setCodingProfiles] = useState(
+    cachedHomepageData?.codingProfiles || []
+  );
+  const setProfile = useProfileStore((state) => state.setProfile);
 
   const projectsRef = useRef(null);
   const skillsRef = useRef(null);
 
   useEffect(() => {
+    if (cachedHomepageData?.ownerProfile) {
+      setProfile(cachedHomepageData.ownerProfile);
+    }
+
     const fetchData = async () => {
       try {
-        const { data } = await api.get("/homepage");
+        const data = await loadHomepageData();
 
         setFeaturedProjects(data.featuredProjects || []);
         setSkills(data.skills || []);
-        setOwnerProfile(data.ownerProfile || null);
         setCodingProfiles(data.codingProfiles || []);
         setStats(
           data.stats || {
@@ -45,15 +54,21 @@ const Home = () => {
             yearsExperience: 0,
           }
         );
+        if (data.ownerProfile) {
+          setProfile(data.ownerProfile);
+        }
+        cacheHomepageData(data);
       } catch (error) {
-        toast.error("Failed to load content");
+        if (!cachedHomepageData) {
+          toast.error("Failed to load content");
+        }
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, []);
+  }, [cachedHomepageData, setProfile]);
 
   // GSAP ScrollTrigger animations
   useEffect(() => {
@@ -131,7 +146,7 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <Hero profileData={ownerProfile} />
+      <Hero />
 
       {/* Featured Projects Section */}
       <section ref={projectsRef} className="section bg-gray-50 dark:bg-dark-800">

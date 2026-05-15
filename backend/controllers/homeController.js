@@ -46,7 +46,10 @@ export const getHomepageData = async (req, res) => {
           category: { $in: ["work", "internship"] },
         }).lean(),
 
-        CodingProfile.find({ enabled: true }).sort({ platform: 1 }).lean(),
+        CodingProfile.find({ enabled: true })
+          .select("platform profileUrl enabled")
+          .sort({ platform: 1 })
+          .lean(),
       ]);
 
     let totalMonths = 0;

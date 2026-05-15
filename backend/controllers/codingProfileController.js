@@ -6,7 +6,13 @@ import axios from "axios";
 // @access  Public
 export const getCodingProfiles = async (req, res) => {
   try {
-    const profiles = await CodingProfile.find({ enabled: true });
+    const query = CodingProfile.find({ enabled: true });
+
+    if (req.query.summary === "true") {
+      query.select("platform profileUrl enabled");
+    }
+
+    const profiles = await query;
     res.json(profiles);
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });

@@ -24,16 +24,38 @@ connectDB();
 
 const app = express();
 
+const defaultAllowedOrigins = [
+  "http://localhost:3001",
+  "http://127.0.0.1:3001",
+  "https://my-portfolio-khaki-eight-80.vercel.app",
+  "https://portfolio-mu-three-88.vercel.app",
+];
+
+const configuredAllowedOrigins = process.env.CLIENT_ORIGINS
+  ? process.env.CLIENT_ORIGINS.split(",").map((origin) => origin.trim())
+  : [];
+
+const allowedOrigins = new Set([
+  ...defaultAllowedOrigins,
+  ...configuredAllowedOrigins,
+]);
+
 // Middleware
-app.use(cors({
-  origin: [
-    "http://localhost:3001",
-    "https://my-portfolio-khaki-eight-80.vercel.app",
-  ],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use(
+  cors({
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.has(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api/homepage", homeRoutes);

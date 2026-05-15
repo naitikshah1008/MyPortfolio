@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import api from "../utils/api";
-import { getFallbackProfile } from "../utils/profile";
+import useProfileStore from "../store/profileStore";
 import {
   FiGithub,
   FiLinkedin,
@@ -14,9 +15,18 @@ import { FaHackerrank } from "react-icons/fa";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const location = useLocation();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const [profile] = useState(getFallbackProfile);
+  const profile = useProfileStore((state) => state.profile);
+  const hasLoadedProfile = useProfileStore((state) => state.hasLoadedProfile);
+  const loadProfile = useProfileStore((state) => state.loadProfile);
+
+  useEffect(() => {
+    if (location.pathname !== "/" && !hasLoadedProfile) {
+      loadProfile().catch(() => {});
+    }
+  }, [hasLoadedProfile, loadProfile, location.pathname]);
 
   const handleSubscribe = async (e) => {
     e.preventDefault();

@@ -8,36 +8,7 @@ import {
   SiGeeksforgeeks,
 } from "react-icons/si";
 import { FiGithub, FiExternalLink, FiCode, FiBookOpen } from "react-icons/fi";
-import { useState, useEffect } from "react";
-import api from "../utils/api";
-
-const CodingProfilesSection = ({
-  profiles: initialProfiles,
-  loading: initialLoading,
-}) => {
-  const [profiles, setProfiles] = useState(initialProfiles || []);
-  const [loading, setLoading] = useState(initialLoading ?? true);
-
-  useEffect(() => {
-    if (initialProfiles) {
-      setProfiles(initialProfiles.filter((p) => p.enabled));
-      setLoading(Boolean(initialLoading));
-      return;
-    }
-
-    fetchProfiles();
-  }, [initialProfiles, initialLoading]);
-
-  const fetchProfiles = async () => {
-    try {
-      const response = await api.get("/coding-profiles");
-      setProfiles(response.data.filter((p) => p.enabled));
-    } catch (error) {
-      // Silent error handling
-    } finally {
-      setLoading(false);
-    }
-  };
+const CodingProfilesSection = ({ profiles = [], loading = true }) => {
 
   const getPlatformIcon = (platform) => {
     const icons = {

@@ -6,17 +6,14 @@ import {
   FiEye,
   FiDownload,
   FiX,
-  FiBriefcase,
-  FiZap,
-  FiCode,
 } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
-import { getFallbackProfile } from "../utils/profile";
+import { useEffect, useRef, useState } from "react";
+import useProfileStore from "../store/profileStore";
 import { loadGsapWithScrollTrigger } from "../utils/animations";
 
-const Hero = ({ profileData }) => {
-  const [profile, setProfile] = useState(getFallbackProfile);
+const Hero = () => {
+  const profile = useProfileStore((state) => state.profile);
   const [showResumePreview, setShowResumePreview] = useState(false);
   const [pdfLoadError, setPdfLoadError] = useState(false);
 
@@ -30,12 +27,6 @@ const Hero = ({ profileData }) => {
   const textRef = useRef(null);
   const imageRef = useRef(null);
   const socialRef = useRef(null);
-
-  useEffect(() => {
-    if (profileData) {
-      setProfile({ ...getFallbackProfile(), ...profileData });
-    }
-  }, [profileData]);
 
   // GSAP animations
   useEffect(() => {
@@ -106,7 +97,7 @@ const Hero = ({ profileData }) => {
             "MERN Stack Developer",
           ];
 
-    const currentRole = roles[currentRoleIndex];
+    const currentRole = roles[currentRoleIndex % roles.length];
     const typingSpeed = isDeleting ? 50 : 100;
     const pauseTime = isDeleting ? 500 : 2000;
 
@@ -135,6 +126,12 @@ const Hero = ({ profileData }) => {
 
     return () => clearTimeout(timeout);
   }, [displayedText, isDeleting, currentRoleIndex, profile]);
+
+  useEffect(() => {
+    setDisplayedText("");
+    setCurrentRoleIndex(0);
+    setIsDeleting(false);
+  }, [profile.roles]);
 
   const handleDownloadResume = () => {
     if (!profile?.resume?.url) return;
