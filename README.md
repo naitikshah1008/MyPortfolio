@@ -1,4 +1,4 @@
-# 🚀 MERN Portfolio with Admin Panel
+# MERN Portfolio with Admin Panel
 
 > A modern, full-stack developer portfolio with admin dashboard, coding stats integration, and analytics.
 
@@ -8,9 +8,9 @@
 
 ---
 
-## ✨ Features
+## Features
 
-### 🎨 Frontend
+### Frontend
 
 - Modern, responsive design with dark mode
 - Smooth animations using Framer Motion
@@ -18,7 +18,7 @@
 - Interactive coding stats dashboard
 - Blog system with markdown support
 
-### 🔐 Admin Panel
+### Admin Panel
 
 - Secure JWT authentication
 - Complete content management (CRUD)
@@ -27,7 +27,7 @@
 - Real-time coding profile sync
 - Password change functionality
 
-### 📊 Analytics
+### Analytics
 
 - Coding profile statistics (LeetCode, Codeforces, CodeChef, etc.)
 - Animated rating charts
@@ -36,7 +36,7 @@
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 **Frontend:**
 
@@ -58,7 +58,7 @@
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -111,7 +111,7 @@
 
 ---
 
-## 📖 Documentation
+## Documentation
 
 For complete setup and deployment instructions, see **[SETUP.md](./SETUP.md)**
 
@@ -128,7 +128,7 @@ The setup guide includes:
 
 ---
 
-## 🌐 Deployment
+## Deployment
 
 ### Free Hosting ($0/month)
 
@@ -157,7 +157,7 @@ See **[SETUP.md](./SETUP.md)** for step-by-step deployment guide.
 
 ---
 
-## 🔒 Security Features
+## Security Features
 
 - ✅ JWT-based authentication
 - ✅ Password hashing with bcrypt
@@ -169,13 +169,13 @@ See **[SETUP.md](./SETUP.md)** for step-by-step deployment guide.
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please follow these steps:
 
@@ -187,7 +187,7 @@ Contributions are welcome! Please follow these steps:
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) - Database hosting
 - [Render](https://render.com) - Backend hosting
