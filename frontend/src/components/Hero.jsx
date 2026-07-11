@@ -31,6 +31,8 @@ const stackHighlights = [
 const heroSummary =
   "I’m Naitik Shah, a Software Engineer who builds full-stack products across user interfaces, backend services, data workflows, and AI-powered features. I focus on clean architecture, fast user experiences, and reliable systems that are practical to ship and maintain.";
 
+const profileRole = "Software Engineer";
+
 const normalizeProfileUrl = (value, baseUrl) => {
   if (!value) return "";
   if (value.startsWith("http")) return value;
@@ -261,19 +263,19 @@ const Hero = () => {
                       <span className="text-emerald-700 dark:text-emerald-300">"{name}"</span>,
                       {"\n  "}
                       <span className="text-slate-500 dark:text-gray-400">role:</span>{" "}
-                      <span className="text-emerald-700 dark:text-emerald-300">"{activeRole}"</span>,
+                      <span className="text-emerald-700 dark:text-emerald-300">"{profileRole}"</span>,
                       {"\n  "}
-                      <span className="text-slate-500 dark:text-gray-400">focus:</span>{" "}
+                      <span className="text-slate-500 dark:text-gray-400">builds:</span>{" "}
                       <span className="text-slate-950 dark:text-gray-100">[</span>
                       <span className="text-emerald-700 dark:text-emerald-300">"product"</span>,{" "}
-                      <span className="text-emerald-700 dark:text-emerald-300">"systems"</span>,{" "}
+                      <span className="text-emerald-700 dark:text-emerald-300">"platforms"</span>,{" "}
                       <span className="text-emerald-700 dark:text-emerald-300">"AI"</span>
                       <span className="text-slate-950 dark:text-gray-100">]</span>,
                       {"\n  "}
-                      <span className="text-slate-500 dark:text-gray-400">ships:</span>{" "}
+                      <span className="text-slate-500 dark:text-gray-400">quality:</span>{" "}
                       <span className="text-slate-950 dark:text-gray-100">[</span>
-                      <span className="text-emerald-700 dark:text-emerald-300">"usable"</span>,{" "}
-                      <span className="text-emerald-700 dark:text-emerald-300">"reliable"</span>
+                      <span className="text-emerald-700 dark:text-emerald-300">"fast"</span>,{" "}
+                      <span className="text-emerald-700 dark:text-emerald-300">"maintainable"</span>
                       <span className="text-slate-950 dark:text-gray-100">]</span>
                       {"\n"}
                       <span className="text-slate-950 dark:text-gray-100">{"}"}</span>;
@@ -307,12 +309,12 @@ const Hero = () => {
                   <div className="mt-4 rounded-lg border border-emerald-200 bg-emerald-50 p-3 font-mono text-xs text-emerald-900 dark:!border-dark-700 dark:!bg-dark-700 dark:!text-emerald-100">
                     <div className="mb-2 flex items-center gap-2 text-emerald-700 dark:text-emerald-300">
                       <FiCode size={14} />
-                      shipping mindset
+                      engineering standard
                     </div>
                     <div className="space-y-1 text-slate-700 dark:text-gray-300">
-                      <div>scope: product + systems</div>
-                      <div>style: clean, reliable</div>
-                      <div>goal: user impact</div>
+                      <div>scope: product + platform</div>
+                      <div>style: clear, scalable</div>
+                      <div>goal: useful software</div>
                     </div>
                   </div>
                 </div>
