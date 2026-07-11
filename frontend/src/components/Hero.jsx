@@ -11,6 +11,7 @@ import {
 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
+import HeroNetworkBackground from "./HeroNetworkBackground";
 import useProfileStore from "../store/profileStore";
 import { loadGsapWithScrollTrigger } from "../utils/animations";
 
@@ -136,7 +137,7 @@ const Hero = () => {
       ref={heroRef}
       className="relative -mt-20 flex min-h-screen items-center overflow-hidden border-b border-slate-200 bg-slate-50 pt-20 text-slate-950 dark:border-white/10 dark:bg-dark-900 dark:text-white"
     >
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(8,145,178,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(8,145,178,0.07)_1px,transparent_1px)] bg-[size:64px_64px] dark:bg-[linear-gradient(to_right,rgba(103,232,249,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(103,232,249,0.055)_1px,transparent_1px)]" />
+      <HeroNetworkBackground />
       <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(236,254,255,0.88)_0%,rgba(248,250,252,0.78)_45%,rgba(251,246,238,0.58)_100%)] dark:bg-[linear-gradient(120deg,rgba(8,145,178,0.18)_0%,rgba(7,16,23,0)_38%,rgba(169,105,45,0.14)_100%)]" />
       <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-slate-50 to-transparent dark:from-dark-900" />
 
