@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,17 +7,19 @@
         --toast-bg: #ffffff;
         --toast-color: #1f2937;
         --toast-border: #e5e7eb;
+        color-scheme: light;
     }
 
     .dark {
-        --toast-bg: #1e293b;
+        --toast-bg: #18231f;
         --toast-color: #f3f4f6;
-        --toast-border: #334155;
+        --toast-border: #2d3a35;
+        color-scheme: dark;
     }
 
     body {
-        @apply bg-white dark:bg-dark-900 text-gray-900 dark:text-gray-100 transition-colors duration-300;
-        font-family: 'Poppins', sans-serif;
+        @apply bg-stone-50 dark:bg-dark-900 text-gray-900 dark:text-gray-100 transition-colors duration-300;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
     h1,
@@ -28,9 +28,9 @@
     h4,
     h5,
     h6 {
-        font-family: 'Poppins', sans-serif;
+        font-family: inherit;
         font-weight: 700;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        letter-spacing: 0;
     }
 
     /* Custom scrollbar */
@@ -81,46 +81,42 @@
 
 @layer components {
 
-    /* 3D Card Effect */
+    /* Card Effect */
     .card-3d {
-        @apply bg-white dark:bg-dark-800 rounded-2xl shadow-2xl transition-all duration-300 border border-gray-200 dark:border-dark-700;
-        transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        @apply bg-white dark:bg-dark-800 rounded-lg shadow-sm transition-all duration-200 border border-stone-200 dark:border-dark-700;
+        transform: translateZ(0);
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
     }
 
     .card-3d:hover {
-        transform: perspective(1000px) rotateX(2deg) rotateY(-2deg) translateY(-5px);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(59, 130, 246, 0.1);
+        transform: translateY(-3px);
+        box-shadow: 0 16px 32px rgba(13, 20, 18, 0.08);
     }
 
-    /* Glassmorphism effect */
+    /* Surface effect */
     .glass {
-        @apply bg-white/10 dark:bg-white/5 backdrop-blur-lg border border-white/20 dark:border-white/10;
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        @apply bg-white/90 dark:bg-dark-800/90 backdrop-blur-md border border-stone-200 dark:border-dark-700;
+        box-shadow: 0 18px 40px rgba(13, 20, 18, 0.08);
     }
 
     .glass-card {
-        @apply glass rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300;
+        @apply glass rounded-lg p-6 transition-colors duration-200;
     }
 
-    /* Gradient text */
+    /* Accent text */
     .gradient-text {
-        @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-500 via-purple-500 to-pink-500;
-        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        @apply text-primary-700 dark:text-primary-300;
     }
 
     .gradient-text-3d {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        filter: drop-shadow(2px 2px 4px rgba(102, 126, 234, 0.3));
-        text-shadow: 0 0 40px rgba(102, 126, 234, 0.5);
+        @apply text-primary-700 dark:text-primary-300;
+        filter: none;
+        text-shadow: none;
     }
 
-    /* Neon glow effect */
+    /* Legacy utility aliases kept subtle for older components */
     .neon-glow {
-        @apply shadow-[0_0_20px_rgba(59, 130, 246, 0.5)] dark:shadow-[0_0_30px_rgba(59, 130, 246, 0.7)];
+        box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.18), 0 12px 30px rgba(7, 16, 23, 0.12);
     }
 
     .neon-border {
@@ -132,7 +128,7 @@
         content: '';
         position: absolute;
         inset: -2px;
-        background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #667eea);
+        background: linear-gradient(45deg, #67e8f9, #06b6d4, #a9692d, #67e8f9);
         border-radius: inherit;
         opacity: 0;
         transition: opacity 0.3s;
@@ -161,78 +157,35 @@
 
     /* Button styles */
     .btn {
-        @apply px-6 py-3 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 active:scale-95;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        @apply inline-flex items-center justify-center px-5 py-3 rounded-lg font-semibold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-dark-900;
+        box-shadow: none;
     }
 
     .btn-primary {
-        @apply btn bg-gradient-to-r from-primary-600 to-purple-600 text-white shadow-lg hover:shadow-xl;
-        box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
-        position: relative;
-        overflow: hidden;
+        @apply btn bg-primary-700 text-white hover:bg-primary-800 dark:bg-primary-400 dark:text-dark-900 dark:hover:bg-primary-300;
+        box-shadow: 0 10px 24px rgba(6, 182, 212, 0.22);
     }
 
     .dark .btn-primary {
-        box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
-    }
-
-    .btn-primary::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-        transition: left 0.5s;
-    }
-
-    .btn-primary:hover::before {
-        left: 100%;
-    }
-
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        transition: all 0.3s ease;
+        box-shadow: 0 10px 24px rgba(34, 211, 238, 0.12);
     }
 
     .btn-secondary {
-        @apply btn bg-gray-200 dark:bg-dark-700 text-gray-900 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-dark-600;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        transition: all 0.3s ease;
-    }
-
-    .dark .btn-secondary {
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    }
-
-    .btn-secondary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-    }
-
-    .dark .btn-secondary:hover {
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+        @apply btn bg-stone-200 text-gray-900 hover:bg-stone-300 dark:bg-dark-700 dark:text-gray-100 dark:hover:bg-dark-600;
     }
 
     .btn-outline {
-        @apply btn border-2 border-primary-600 text-primary-600 dark:text-primary-400 dark:border-primary-500 hover:bg-primary-600 hover:text-white;
-        transition: all 0.3s ease;
-    }
-
-    .btn-outline:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(59, 130, 246, 0.2);
+        @apply btn border border-primary-700 text-primary-700 hover:bg-primary-50 dark:border-primary-400 dark:text-primary-300 dark:hover:bg-primary-900/30;
     }
 
     /* Input styles */
     .input {
-        @apply w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-dark-600 bg-white dark:bg-dark-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300;
-        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        @apply w-full px-4 py-3 rounded-lg border border-stone-300 dark:border-dark-600 bg-white dark:bg-dark-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200;
+        box-shadow: none;
     }
 
     .input:focus {
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.14);
     }
 
     /* Textarea with formatting support */
@@ -240,7 +193,7 @@
         @apply input;
         white-space: pre-wrap;
         word-wrap: break-word;
-        font-family: 'Poppins', sans-serif;
+        font-family: inherit;
         line-height: 1.6;
         resize: vertical;
     }
@@ -309,14 +262,14 @@
 
     /* Card styles */
     .card {
-        @apply bg-white dark:bg-dark-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-dark-700;
+        @apply bg-white dark:bg-dark-800 rounded-lg shadow-sm transition-all duration-200 border border-stone-200 dark:border-dark-700;
         transform: translateZ(0);
         backface-visibility: hidden;
     }
 
     .card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        transform: translateY(-2px);
+        box-shadow: 0 14px 30px rgba(13, 20, 18, 0.08);
     }
 
     /* Section container */
