@@ -51,7 +51,7 @@ const Hero = () => {
   const socialRef = useRef(null);
 
   const name = profile?.name || "Naitik Shah";
-  const bio = heroSummary;
+  const bio = profile?.bio || heroSummary;
   const roles = profile?.roles?.length > 0 ? profile.roles : fallbackRoles;
   const activeRole = displayedText;
   const profileImage = profile?.profileImage?.url;
