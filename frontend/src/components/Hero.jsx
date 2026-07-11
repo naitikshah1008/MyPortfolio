@@ -28,9 +28,6 @@ const stackHighlights = [
   { icon: FiCpu, label: "Systems", value: "Kafka, Docker, Cloud" },
 ];
 
-const heroSummary =
-  "I’m Naitik Shah, a Software Engineer who builds full-stack products across user interfaces, backend services, data workflows, and AI-powered features. I focus on clean architecture, fast user experiences, and reliable systems that are practical to ship and maintain.";
-
 const profileRole = "Software Engineer";
 
 const normalizeProfileUrl = (value, baseUrl) => {
