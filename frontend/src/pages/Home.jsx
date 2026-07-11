@@ -149,7 +149,10 @@ const Home = () => {
       <Hero />
 
       {/* Featured Projects Section */}
-      <section ref={projectsRef} className="section bg-gray-50 dark:bg-dark-800">
+      <section
+        ref={projectsRef}
+        className="section border-y border-stone-200 bg-stone-100/70 dark:border-dark-700 dark:bg-dark-800"
+      >
         <div className="container">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -160,9 +163,7 @@ const Home = () => {
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-gray-100">
               Featured{" "}
-              <span className="bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent">
-                Projects
-              </span>
+              <span className="gradient-text">Projects</span>
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
               Check out some of my recent work
@@ -209,9 +210,7 @@ const Home = () => {
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-gray-100">
               My{" "}
-              <span className="bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent">
-                Skills
-              </span>
+              <span className="gradient-text">Skills</span>
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
               Technologies and tools I work with
@@ -249,7 +248,7 @@ const Home = () => {
       <CodingProfilesSection profiles={codingProfiles} loading={loading} />
 
       {/* CTA Section - Minimalistic */}
-      <section className="py-12 md:py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-white dark:bg-dark-900">
+      <section className="relative overflow-hidden border-t border-stone-200 bg-white px-4 py-12 dark:border-dark-700 dark:bg-dark-900 sm:px-6 md:py-16 lg:px-8">
         <div className="container relative z-10 px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -264,7 +263,7 @@ const Home = () => {
               whileInView={{ width: "100%" }}
               viewport={{ once: true }}
               transition={{ delay: 0.2, duration: 0.8 }}
-              className="h-px bg-gradient-to-r from-transparent via-primary-500 to-transparent mb-16"
+              className="mb-16 h-px bg-stone-200 dark:bg-dark-700"
             />
 
             <motion.h2
@@ -275,9 +274,7 @@ const Home = () => {
               className="text-4xl md:text-5xl font-bold mb-6 text-gray-900 dark:text-gray-100"
             >
               Let's Work{" "}
-              <span className="bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent">
-                Together
-              </span>
+              <span className="gradient-text">Together</span>
             </motion.h2>
 
             <motion.p
@@ -299,15 +296,15 @@ const Home = () => {
             >
               <Link
                 to="/contact"
-                className="group inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-primary-600 to-purple-600 text-white font-medium rounded-lg hover:shadow-lg transition-all duration-300 hover:scale-105"
+                className="btn-primary group gap-2 px-8 py-4"
               >
                 <span>Get In Touch</span>
-                <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
+                <FiArrowRight className="transition-transform group-hover:translate-x-1" />
               </Link>
 
               <Link
                 to="/projects"
-                className="inline-flex items-center gap-2 px-8 py-4 border-2 border-gray-300 dark:border-dark-700 text-gray-900 dark:text-gray-100 font-medium rounded-lg hover:border-primary-500 dark:hover:border-primary-500 transition-all duration-300 hover:scale-105"
+                className="btn-outline px-8 py-4"
               >
                 View My Work
               </Link>
@@ -329,7 +326,7 @@ const Home = () => {
                   transition={{ delay: 0.7 }}
                   className="text-center"
                 >
-                  <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                  <div className="gradient-text mb-2 text-4xl font-bold md:text-5xl">
                     {stats.totalProjects}
                   </div>
                   <div className="text-sm md:text-base text-gray-600 dark:text-gray-400">
@@ -344,7 +341,7 @@ const Home = () => {
                   transition={{ delay: 0.8 }}
                   className="text-center"
                 >
-                  <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                  <div className="gradient-text mb-2 text-4xl font-bold md:text-5xl">
                     {stats.yearsExperience}
                   </div>
                   <div className="text-sm md:text-base text-gray-600 dark:text-gray-400">
@@ -360,7 +357,7 @@ const Home = () => {
               whileInView={{ width: "100%" }}
               viewport={{ once: true }}
               transition={{ delay: 0.9, duration: 0.8 }}
-              className="h-px bg-gradient-to-r from-transparent via-primary-500 to-transparent mt-16"
+              className="mt-16 h-px bg-stone-200 dark:bg-dark-700"
             />
           </motion.div>
         </div>

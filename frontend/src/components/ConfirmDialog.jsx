@@ -25,11 +25,11 @@ const ConfirmDialog = ({
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
-          className="bg-white dark:bg-dark-800 rounded-2xl shadow-2xl max-w-md w-full p-6"
+          className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl dark:bg-dark-800"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex items-start gap-4 mb-6">
-            <div className="p-3 bg-red-100 dark:bg-red-900/30 rounded-full">
+            <div className="rounded-lg bg-red-100 p-3 dark:bg-red-900/30">
               <FiAlertTriangle
                 className="text-red-600 dark:text-red-400"
                 size={24}

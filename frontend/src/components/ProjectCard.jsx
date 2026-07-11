@@ -4,23 +4,30 @@ import { FiGithub, FiExternalLink } from "react-icons/fi";
 
 const ProjectCard = ({ project }) => {
   return (
-    <motion.div whileHover={{ y: -8 }} className="card overflow-hidden group">
+    <motion.div whileHover={{ y: -4 }} className="card group overflow-hidden">
       {/* Project Image */}
-      <div className="relative h-48 overflow-hidden">
-        <img
-          src={project.image}
-          alt={project.title}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+      <div className="relative h-48 overflow-hidden bg-stone-100 dark:bg-dark-700">
+        {project.image ? (
+          <img
+            src={project.image}
+            alt={project.title}
+            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center text-lg font-semibold text-primary-700 dark:text-primary-300">
+            {project.title}
+          </div>
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-dark-900/80 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
           <div className="absolute bottom-4 left-4 right-4 flex gap-2">
             {project.links?.github && (
               <a
                 href={project.links.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-lg bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-colors duration-200"
+                className="rounded-lg bg-white p-2 text-gray-900 transition-colors duration-200 hover:bg-primary-50 hover:text-primary-700"
                 onClick={(e) => e.stopPropagation()}
+                aria-label={`${project.title} GitHub repository`}
               >
                 <FiGithub size={20} />
               </a>
@@ -30,8 +37,9 @@ const ProjectCard = ({ project }) => {
                 href={project.links.live}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-lg bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-colors duration-200"
+                className="rounded-lg bg-white p-2 text-gray-900 transition-colors duration-200 hover:bg-primary-50 hover:text-primary-700"
                 onClick={(e) => e.stopPropagation()}
+                aria-label={`${project.title} live site`}
               >
                 <FiExternalLink size={20} />
               </a>
@@ -54,13 +62,13 @@ const ProjectCard = ({ project }) => {
           {project.techStack?.slice(0, 3).map((tech, index) => (
             <span
               key={index}
-              className="px-3 py-1 text-xs font-medium rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300"
+              className="rounded-md bg-primary-50 px-3 py-1 text-xs font-medium text-primary-800 dark:bg-primary-900/30 dark:text-primary-200"
             >
               {tech}
             </span>
           ))}
           {project.techStack?.length > 3 && (
-            <span className="px-3 py-1 text-xs font-medium rounded-full bg-gray-100 dark:bg-dark-700 text-gray-700 dark:text-gray-300">
+            <span className="rounded-md bg-stone-100 px-3 py-1 text-xs font-medium text-gray-700 dark:bg-dark-700 dark:text-gray-300">
               +{project.techStack.length - 3} more
             </span>
           )}
@@ -69,7 +77,7 @@ const ProjectCard = ({ project }) => {
         {/* View Details */}
         <Link
           to={`/projects/${project._id}`}
-          className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 hover:gap-3 transition-all duration-200 font-medium"
+          className="inline-flex items-center gap-2 font-medium text-primary-700 transition-colors duration-200 hover:text-primary-900 dark:text-primary-300 dark:hover:text-primary-200"
         >
           View Details
           <FiExternalLink size={16} />

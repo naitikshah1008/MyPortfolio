@@ -241,12 +241,7 @@ const Settings = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1
-            className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-2"
-            style={{
-              textShadow: "2px 2px 4px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+          <h1 className="mb-2 text-4xl font-bold text-gray-900 dark:text-gray-100">
             <span className="gradient-text-3d">Settings</span>
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
@@ -263,7 +258,7 @@ const Settings = () => {
       >
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-3 rounded-lg bg-gradient-to-r from-primary-100 to-purple-100 dark:from-primary-900/30 dark:to-purple-900/30">
+            <div className="rounded-lg bg-primary-50 p-3 dark:bg-primary-900/30">
               <FiUser className="text-2xl text-primary-600 dark:text-primary-400" />
             </div>
             <div>
@@ -493,7 +488,7 @@ const Settings = () => {
       >
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-3 rounded-lg bg-gradient-to-r from-red-100 to-orange-100 dark:from-red-900/30 dark:to-orange-900/30">
+            <div className="rounded-lg bg-red-50 p-3 dark:bg-red-900/30">
               <FiLock className="text-2xl text-red-600 dark:text-red-400" />
             </div>
             <div>

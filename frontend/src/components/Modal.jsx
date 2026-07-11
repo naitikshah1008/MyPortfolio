@@ -42,7 +42,7 @@ const Modal = ({ isOpen, onClose, title, children, size = "md" }) => {
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                className={`w-full ${sizes[size]} bg-white dark:bg-dark-800 rounded-2xl shadow-2xl`}
+                className={`w-full ${sizes[size]} rounded-lg bg-white shadow-xl dark:bg-dark-800`}
                 onClick={(e) => e.stopPropagation()}
               >
                 {/* Header */}

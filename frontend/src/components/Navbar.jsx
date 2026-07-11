@@ -55,15 +55,18 @@ const Navbar = () => {
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled || isOpen
-            ? "bg-white/90 dark:bg-dark-900/90 backdrop-blur-lg shadow-lg"
+            ? "border-b border-stone-200 bg-white/90 shadow-sm backdrop-blur-lg dark:border-dark-700 dark:bg-dark-900/90"
             : "bg-transparent"
         }`}
       >
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
-            <Link to="/" className="text-2xl font-bold gradient-text">
-              Portfolio
+            <Link
+              to="/"
+              className="font-mono text-xl font-bold text-gray-950 transition-colors hover:text-primary-700 dark:text-white dark:hover:text-primary-300"
+            >
+              naitik<span className="text-primary-600 dark:text-primary-300">.dev</span>
             </Link>
 
             {/* Desktop Navigation */}
@@ -99,7 +102,7 @@ const Navbar = () => {
               {/* Theme Toggle */}
               <button
                 onClick={toggleTheme}
-                className="p-2 rounded-lg bg-gray-200 dark:bg-dark-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-dark-600 transition-colors duration-200"
+                className="rounded-lg border border-stone-200 bg-white p-2 text-gray-700 transition-colors hover:border-primary-500 hover:text-primary-700 dark:border-dark-700 dark:bg-dark-800 dark:text-gray-300 dark:hover:border-primary-400 dark:hover:text-primary-300"
                 aria-label="Toggle theme"
               >
                 {theme === "light" ? <FiMoon size={20} /> : <FiSun size={20} />}
@@ -110,14 +113,14 @@ const Navbar = () => {
             <div className="md:hidden flex items-center gap-4">
               <button
                 onClick={toggleTheme}
-                className="p-2 rounded-lg bg-gray-200 dark:bg-dark-700 text-gray-700 dark:text-gray-300"
+                className="rounded-lg border border-stone-200 bg-white p-2 text-gray-700 dark:border-dark-700 dark:bg-dark-800 dark:text-gray-300"
                 aria-label="Toggle theme"
               >
                 {theme === "light" ? <FiMoon size={20} /> : <FiSun size={20} />}
               </button>
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="p-2 rounded-lg bg-gray-200 dark:bg-dark-700 text-gray-700 dark:text-gray-300"
+                className="rounded-lg border border-stone-200 bg-white p-2 text-gray-700 dark:border-dark-700 dark:bg-dark-800 dark:text-gray-300"
                 aria-label="Toggle menu"
               >
                 {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
@@ -133,7 +136,7 @@ const Navbar = () => {
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.2 }}
-                className="md:hidden overflow-hidden bg-white/95 dark:bg-dark-800/95 backdrop-blur-sm rounded-b-2xl shadow-xl"
+                className="overflow-hidden rounded-b-lg border-x border-b border-stone-200 bg-white/95 shadow-sm backdrop-blur-sm dark:border-dark-700 dark:bg-dark-800/95 md:hidden"
               >
                 <div className="py-4 space-y-2 px-2">
                   {navLinks.map((link) => (
@@ -145,8 +148,8 @@ const Navbar = () => {
                       onClick={() => setIsOpen(false)}
                       className={`block px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
                         isActive(link.path)
-                          ? "bg-gradient-to-r from-primary-600 to-purple-600 text-white shadow-md"
-                          : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-700 hover:shadow-sm"
+                          ? "bg-primary-700 text-white dark:bg-primary-400 dark:text-dark-900"
+                          : "text-gray-700 hover:bg-stone-100 dark:text-gray-300 dark:hover:bg-dark-700"
                       }`}
                     >
                       {link.label}

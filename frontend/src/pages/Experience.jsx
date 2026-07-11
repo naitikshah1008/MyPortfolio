@@ -46,16 +46,61 @@ const Experience = () => {
     return acc;
   }, {});
 
-  const categoryColors = {
-    work: "from-blue-500 to-blue-600",
-    education: "from-purple-500 to-purple-600",
-    internship: "from-green-500 to-green-600",
-    freelance: "from-orange-500 to-orange-600",
-    volunteer: "from-pink-500 to-pink-600",
-    certification: "from-indigo-500 to-indigo-600",
-    project: "from-cyan-500 to-cyan-600",
-    achievement: "from-yellow-500 to-yellow-600",
-    other: "from-gray-500 to-gray-600",
+  const categoryStyles = {
+    work: {
+      icon: "bg-primary-700 text-white dark:bg-primary-400 dark:text-dark-900",
+      dot: "bg-primary-600 dark:bg-primary-300",
+      badge:
+        "border-primary-200 bg-primary-50 text-primary-800 dark:border-primary-800 dark:bg-primary-900/30 dark:text-primary-200",
+    },
+    education: {
+      icon: "bg-accent-600 text-white",
+      dot: "bg-accent-500",
+      badge:
+        "border-accent-200 bg-accent-50 text-accent-800 dark:border-accent-800 dark:bg-accent-900/30 dark:text-accent-200",
+    },
+    internship: {
+      icon: "bg-emerald-700 text-white",
+      dot: "bg-emerald-600",
+      badge:
+        "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-200",
+    },
+    freelance: {
+      icon: "bg-orange-700 text-white",
+      dot: "bg-orange-600",
+      badge:
+        "border-orange-200 bg-orange-50 text-orange-800 dark:border-orange-800 dark:bg-orange-900/30 dark:text-orange-200",
+    },
+    volunteer: {
+      icon: "bg-rose-700 text-white",
+      dot: "bg-rose-600",
+      badge:
+        "border-rose-200 bg-rose-50 text-rose-800 dark:border-rose-800 dark:bg-rose-900/30 dark:text-rose-200",
+    },
+    certification: {
+      icon: "bg-slate-700 text-white",
+      dot: "bg-slate-600",
+      badge:
+        "border-slate-200 bg-slate-50 text-slate-800 dark:border-slate-700 dark:bg-slate-900/30 dark:text-slate-200",
+    },
+    project: {
+      icon: "bg-cyan-700 text-white",
+      dot: "bg-cyan-600",
+      badge:
+        "border-cyan-200 bg-cyan-50 text-cyan-800 dark:border-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-200",
+    },
+    achievement: {
+      icon: "bg-yellow-600 text-dark-900",
+      dot: "bg-yellow-500",
+      badge:
+        "border-yellow-200 bg-yellow-50 text-yellow-800 dark:border-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200",
+    },
+    other: {
+      icon: "bg-gray-700 text-white",
+      dot: "bg-gray-600",
+      badge:
+        "border-gray-200 bg-gray-50 text-gray-800 dark:border-dark-700 dark:bg-dark-700 dark:text-gray-200",
+    },
   };
 
   const categoryIcons = {
@@ -110,8 +155,8 @@ const Experience = () => {
             {Object.entries(groupedExperiences).map(
               ([category, categoryExps]) => {
                 const CategoryIcon = categoryIcons[category] || FiBriefcase;
-                const categoryColor =
-                  categoryColors[category] || "from-gray-500 to-gray-600";
+                const categoryStyle =
+                  categoryStyles[category] || categoryStyles.other;
                 return (
                   <motion.div
                     key={category}
@@ -122,20 +167,20 @@ const Experience = () => {
                     {/* Category Header */}
                     <div className="flex items-center gap-3 mb-6">
                       <div
-                        className={`p-2 rounded-lg bg-gradient-to-r ${categoryColor} text-white`}
+                        className={`rounded-lg p-2 ${categoryStyle.icon}`}
                       >
                         <CategoryIcon size={20} />
                       </div>
                       <h2 className="text-xl font-bold capitalize text-gray-900 dark:text-white">
                         {category}
                       </h2>
-                      <div className="flex-1 h-px bg-gradient-to-r from-gray-300 dark:from-dark-600 to-transparent ml-4"></div>
+                      <div className="ml-4 h-px flex-1 bg-stone-200 dark:bg-dark-700"></div>
                     </div>
 
                     {/* Zigzag Timeline */}
                     <div className="relative">
                       {/* Center Vertical Line - Hidden on mobile, shown on desktop */}
-                      <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-gray-300 dark:from-dark-600 to-transparent transform -translate-x-1/2"></div>
+                      <div className="absolute left-1/2 top-0 bottom-0 hidden w-0.5 -translate-x-1/2 bg-stone-200 dark:bg-dark-700 md:block"></div>
 
                       {categoryExps.map((exp, index) => {
                         const isLeft = index % 2 === 0;
@@ -154,24 +199,21 @@ const Experience = () => {
                           >
                             {/* Timeline Dot - Center on desktop, left on mobile */}
                             <div
-                              className={`absolute w-6 h-6 md:w-8 md:h-8 rounded-full bg-white dark:bg-dark-800 border-3 border-primary-500 shadow-md flex items-center justify-center z-10 ${
+                              className={`absolute z-10 flex h-6 w-6 items-center justify-center rounded-full border-2 border-stone-300 bg-white shadow-sm dark:border-dark-600 dark:bg-dark-800 md:h-8 md:w-8 ${
                                 isLeft
                                   ? "-left-3 md:right-0 md:left-auto md:translate-x-1/2"
                                   : "-left-3 md:left-0 md:-translate-x-1/2"
                               } top-6`}
                             >
                               <div
-                                className={`w-2 h-2 md:w-3 md:h-3 rounded-full bg-gradient-to-br ${categoryColor}`}
+                                className={`h-2 w-2 rounded-full md:h-3 md:w-3 ${categoryStyle.dot}`}
                               ></div>
                             </div>
 
                             {/* Content Card */}
                             <motion.div
-                              whileHover={{
-                                scale: 1.02,
-                                x: isLeft ? -5 : 5,
-                              }}
-                              className={`card p-4 md:p-5 group hover:shadow-xl transition-all duration-300 ml-6 md:ml-0 ${
+                              whileHover={{ y: -3 }}
+                              className={`card group ml-6 p-4 transition-all duration-200 md:ml-0 md:p-5 ${
                                 isLeft
                                   ? "md:border-r-4 border-l-4 border-transparent hover:border-primary-500"
                                   : "md:border-l-4 border-l-4 border-transparent hover:border-primary-500"
@@ -221,7 +263,7 @@ const Experience = () => {
 
                                 {/* Date Badge */}
                                 <div
-                                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r ${categoryColor} text-white font-medium text-xs shadow-md flex-shrink-0`}
+                                  className={`inline-flex flex-shrink-0 items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium ${categoryStyle.badge}`}
                                 >
                                   <FiCalendar size={12} />
                                   <span className="whitespace-nowrap">
@@ -256,7 +298,7 @@ const Experience = () => {
                                             className="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300"
                                           >
                                             <span
-                                              className={`mt-1.5 w-1.5 h-1.5 rounded-full bg-gradient-to-br ${categoryColor} flex-shrink-0`}
+                                              className={`mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full ${categoryStyle.dot}`}
                                             ></span>
                                             <span className="flex-1">
                                               {achievement}

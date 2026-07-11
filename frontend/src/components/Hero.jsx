@@ -1,229 +1,167 @@
 import { motion } from "framer-motion";
 import {
+  FiArrowRight,
+  FiCode,
+  FiCpu,
+  FiDatabase,
   FiGithub,
   FiLinkedin,
   FiMail,
-  FiEye,
-  FiDownload,
-  FiX,
+  FiServer,
+  FiTerminal,
 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import useProfileStore from "../store/profileStore";
 import { loadGsapWithScrollTrigger } from "../utils/animations";
 
+const fallbackRoles = [
+  "Full Stack Developer",
+  "Backend Engineer",
+  "Software Engineer",
+  "MERN Stack Developer",
+];
+
+const stackHighlights = [
+  { icon: FiServer, label: "Backend", value: "Java, Spring Boot, APIs" },
+  { icon: FiDatabase, label: "Data", value: "PostgreSQL, Redis, Kafka" },
+  { icon: FiCpu, label: "Systems", value: "Reliable, scalable workflows" },
+];
+
+const normalizeProfileUrl = (value, baseUrl) => {
+  if (!value) return "";
+  if (value.startsWith("http")) return value;
+  return `${baseUrl}${value.replace(/^@/, "")}`;
+};
+
 const Hero = () => {
   const profile = useProfileStore((state) => state.profile);
-  const [showResumePreview, setShowResumePreview] = useState(false);
-  const [pdfLoadError, setPdfLoadError] = useState(false);
 
-  // Typing animation state
   const [displayedText, setDisplayedText] = useState("");
   const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // GSAP refs
   const heroRef = useRef(null);
-  const textRef = useRef(null);
-  const imageRef = useRef(null);
+  const workspaceRef = useRef(null);
   const socialRef = useRef(null);
 
-  // GSAP animations
+  const name = profile?.name || "Naitik Shah";
+  const bio =
+    profile?.bio ||
+    "I build practical web products with a focus on reliable systems, clean interfaces, and thoughtful user flows.";
+  const roles = profile?.roles?.length > 0 ? profile.roles : fallbackRoles;
+  const activeRole = displayedText || roles[currentRoleIndex % roles.length];
+  const profileImage = profile?.profileImage?.url;
+
   useEffect(() => {
-    if (profile && heroRef.current) {
-      let ctx;
-      let cancelled = false;
+    if (!profile || !heroRef.current) return undefined;
 
-      loadGsapWithScrollTrigger().then((gsap) => {
-        if (cancelled || !heroRef.current) return;
+    let ctx;
+    let cancelled = false;
 
-        ctx = gsap.context(() => {
-          // Animate text elements
-          gsap.from(".hero-text", {
-            y: 50,
+    loadGsapWithScrollTrigger().then((gsap) => {
+      if (cancelled || !heroRef.current) return;
+
+      ctx = gsap.context(() => {
+        gsap.from(".hero-text", {
+          y: 24,
+          opacity: 0,
+          duration: 0.7,
+          stagger: 0.12,
+          ease: "power2.out",
+        });
+
+        if (workspaceRef.current) {
+          gsap.from(workspaceRef.current, {
+            y: 24,
             opacity: 0,
-            duration: 1,
-            stagger: 0.2,
-            ease: "power3.out",
+            duration: 0.85,
+            ease: "power2.out",
+            delay: 0.2,
           });
+        }
 
-          // Animate profile image
-          gsap.from(imageRef.current, {
-            scale: 0.8,
-            opacity: 0,
-            duration: 1.2,
-            ease: "elastic.out(1, 0.75)",
-            delay: 0.3,
-          });
+        gsap.from(".social-icon", {
+          y: 8,
+          opacity: 0,
+          duration: 0.4,
+          stagger: 0.08,
+          ease: "power2.out",
+          delay: 0.45,
+        });
+      }, heroRef);
+    });
 
-          // Animate social icons
-          gsap.from(".social-icon", {
-            scale: 0,
-            opacity: 0,
-            duration: 0.6,
-            stagger: 0.1,
-            ease: "back.out(1.7)",
-            delay: 0.8,
-          });
-
-          // Floating animation for profile image
-          gsap.to(imageRef.current, {
-            y: -20,
-            duration: 2.5,
-            ease: "sine.inOut",
-            repeat: -1,
-            yoyo: true,
-          });
-        }, heroRef);
-      });
-
-      return () => {
-        cancelled = true;
-        ctx?.revert();
-      };
-    }
+    return () => {
+      cancelled = true;
+      ctx?.revert();
+    };
   }, [profile]);
 
-  // Typing animation effect
   useEffect(() => {
-    // Get roles from profile or use defaults
-    const roles =
-      profile?.roles?.length > 0
-        ? profile.roles
-        : [
-            "Full Stack Developer",
-            "Web Developer",
-            "Software Engineer",
-            "MERN Stack Developer",
-          ];
-
     const currentRole = roles[currentRoleIndex % roles.length];
-    const typingSpeed = isDeleting ? 50 : 100;
-    const pauseTime = isDeleting ? 500 : 2000;
+    const typingSpeed = isDeleting ? 45 : 85;
+    const pauseTime = isDeleting ? 420 : 1700;
 
     if (!isDeleting && displayedText === currentRole) {
-      // Finished typing, pause before deleting
       const timeout = setTimeout(() => setIsDeleting(true), pauseTime);
       return () => clearTimeout(timeout);
     }
 
     if (isDeleting && displayedText === "") {
-      // Finished deleting, move to next role
       setIsDeleting(false);
       setCurrentRoleIndex((prev) => (prev + 1) % roles.length);
-      return;
+      return undefined;
     }
 
     const timeout = setTimeout(() => {
-      setDisplayedText((prev) => {
-        if (isDeleting) {
-          return currentRole.substring(0, prev.length - 1);
-        } else {
-          return currentRole.substring(0, prev.length + 1);
-        }
-      });
+      setDisplayedText((prev) =>
+        isDeleting
+          ? currentRole.substring(0, prev.length - 1)
+          : currentRole.substring(0, prev.length + 1)
+      );
     }, typingSpeed);
 
     return () => clearTimeout(timeout);
-  }, [displayedText, isDeleting, currentRoleIndex, profile]);
+  }, [displayedText, isDeleting, currentRoleIndex, roles]);
 
   useEffect(() => {
     setDisplayedText("");
     setCurrentRoleIndex(0);
     setIsDeleting(false);
-  }, [profile.roles]);
-
-  const handleDownloadResume = () => {
-    if (!profile?.resume?.url) return;
-
-    const link = document.createElement("a");
-    link.href = profile.resume.url;
-    link.download = profile.resume.filename || "resume.pdf";
-    link.target = "_blank";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+  }, [profile?.roles]);
 
   return (
-    <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-white via-blue-50 to-purple-50 dark:from-gray-900 dark:via-slate-900 dark:to-indigo-950 -mt-20 pt-20">
-      {/* Enhanced Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Animated gradient orbs */}
-        <motion.div
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.4, 0.6, 0.4],
-            x: [0, 50, 0],
-            y: [0, 30, 0],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute top-20 -left-20 w-96 h-96 bg-gradient-to-br from-blue-400 to-cyan-400 dark:from-blue-600 dark:to-cyan-600 rounded-full blur-3xl opacity-30"
-        />
-        <motion.div
-          animate={{
-            scale: [1, 1.3, 1],
-            opacity: [0.4, 0.6, 0.4],
-            x: [0, -30, 0],
-            y: [0, 50, 0],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute top-40 right-0 w-[500px] h-[500px] bg-gradient-to-br from-purple-400 to-pink-400 dark:from-purple-600 dark:to-pink-600 rounded-full blur-3xl opacity-30"
-        />
-        <motion.div
-          animate={{
-            scale: [1, 1.1, 1],
-            opacity: [0.3, 0.5, 0.3],
-            x: [0, 40, 0],
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute bottom-20 left-1/3 w-72 h-72 bg-gradient-to-br from-indigo-400 to-blue-400 dark:from-indigo-600 dark:to-blue-600 rounded-full blur-3xl opacity-25"
-        />
-        
-        {/* Grid pattern overlay */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#8882_1px,transparent_1px),linear-gradient(to_bottom,#8882_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000,transparent)]" />
-      </div>
+    <section
+      ref={heroRef}
+      className="relative -mt-20 flex min-h-screen items-center overflow-hidden border-b border-slate-200 bg-slate-50 pt-20 text-slate-950 dark:border-white/10 dark:bg-dark-900 dark:text-white"
+    >
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(8,145,178,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(8,145,178,0.07)_1px,transparent_1px)] bg-[size:64px_64px] dark:bg-[linear-gradient(to_right,rgba(103,232,249,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(103,232,249,0.055)_1px,transparent_1px)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(236,254,255,0.88)_0%,rgba(248,250,252,0.78)_45%,rgba(251,246,238,0.58)_100%)] dark:bg-[linear-gradient(120deg,rgba(8,145,178,0.18)_0%,rgba(7,16,23,0)_38%,rgba(169,105,45,0.14)_100%)]" />
+      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-slate-50 to-transparent dark:from-dark-900" />
 
-      {/* Content Container */}
       <div className="container relative z-10 px-4 py-12 md:py-16">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-7xl mx-auto">
-          {/* Left Side - Content */}
-          <div ref={textRef} className="order-2 lg:order-1 space-y-4">
-            {/* Greeting Badge */}
-            <div className="hero-text inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary-100 to-purple-100 dark:from-primary-900/30 dark:to-purple-900/30 border border-primary-200 dark:border-primary-800 backdrop-blur-sm">
-              <span className="relative flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-primary-500"></span>
-              </span>
-              <span className="text-sm font-medium text-primary-600 dark:text-primary-400">
-                Welcome to my portfolio
-              </span>
+        <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-2 lg:gap-14">
+          <div className="space-y-6">
+            <div className="hero-text inline-flex items-center gap-2 rounded-lg border border-primary-200 bg-white/80 px-4 py-2 font-mono text-sm font-semibold text-primary-800 shadow-sm dark:!border-dark-700 dark:!bg-dark-800 dark:!text-primary-200 dark:!shadow-none">
+              <FiTerminal size={16} />
+              ~/portfolio/main
             </div>
 
-            {/* Name with enhanced styling */}
-            <h1 className="hero-text text-4xl md:text-5xl lg:text-6xl font-black mb-2 leading-tight">
-              <span className="block text-gray-700 dark:text-gray-300 mb-1 text-xl md:text-2xl font-semibold">Hi, I'm</span>
-              <span className="block text-gray-900 dark:text-white">
-                {profile.name}
-              </span>
-            </h1>
+            <div className="hero-text space-y-3">
+              <p className="text-lg font-semibold text-slate-700 dark:text-gray-300">
+                Hi, I am
+              </p>
+              <h1 className="max-w-4xl text-5xl font-bold leading-[1.02] text-slate-950 dark:text-white md:text-6xl lg:text-7xl">
+                {name}
+              </h1>
+            </div>
 
-            {/* Title with Typing Animation */}
-            <div className="hero-text flex items-center gap-2 text-xl md:text-2xl lg:text-3xl font-bold text-gray-700 dark:text-gray-300 min-h-[2.5rem]">
-              <span className="text-primary-600 dark:text-primary-400">&gt;</span>
-              <span>{displayedText}</span>
+            <div className="hero-text flex min-h-14 w-full max-w-2xl items-center gap-3 rounded-lg border border-slate-300 bg-white/90 px-4 py-3 font-mono text-lg font-semibold text-slate-900 shadow-[0_14px_34px_rgba(15,23,42,0.08)] dark:!border-dark-700 dark:!bg-dark-800 dark:!text-gray-100 dark:!shadow-[0_14px_34px_rgba(0,0,0,0.18)] md:text-xl">
+              <span className="text-primary-700 dark:text-primary-300">$</span>
+              <span className="truncate text-primary-800 dark:text-primary-100">
+                {activeRole}
+              </span>
               <motion.span
                 animate={{ opacity: [1, 0] }}
                 transition={{
@@ -231,317 +169,176 @@ const Hero = () => {
                   repeat: Infinity,
                   repeatType: "reverse",
                 }}
-                className="inline-block w-1 h-6 md:h-8 bg-primary-600 dark:bg-primary-400"
+                className="inline-block h-6 w-0.5 bg-primary-700 dark:bg-primary-300"
               />
             </div>
 
-            {/* Bio with better styling */}
-            <p className="hero-text text-base md:text-lg text-gray-600 dark:text-gray-400 leading-relaxed max-w-2xl">
-              {profile.bio}
+            <p className="hero-text max-w-2xl text-base leading-8 text-slate-700 dark:text-gray-300 md:text-lg">
+              {bio}
             </p>
 
-            {/* CTA Buttons - Enhanced */}
-            <div className="hero-text flex flex-wrap gap-3 pt-2">
+            <div className="hero-text flex flex-wrap gap-3 pt-1">
               <Link
                 to="/projects"
-                className="group relative px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/50 hover:scale-105"
+                className="btn-primary min-h-14 gap-2 px-8 text-base md:text-lg"
               >
-                <span className="relative z-10 flex items-center gap-2">
-                  View Projects
-                  <motion.span
-                    animate={{ x: [0, 5, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                  >
-                    →
-                  </motion.span>
-                </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                View Projects
+                <FiArrowRight size={18} />
               </Link>
-              
               <Link
                 to="/contact"
-                className="px-6 py-3 bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-semibold border-2 border-gray-200 dark:border-gray-700 hover:border-primary-500 dark:hover:border-primary-500 transition-all duration-300 hover:shadow-xl hover:scale-105"
+                className="inline-flex min-h-14 w-40 items-center justify-center whitespace-nowrap rounded-lg border border-primary-600 px-8 py-3 text-base font-semibold text-primary-800 transition-colors hover:bg-primary-50 dark:!border-primary-300 dark:!text-white dark:hover:!bg-dark-800 md:text-lg"
               >
                 Let's Talk
               </Link>
-              
-              {profile.resume?.url && (
-                <button
-                  onClick={() => setShowResumePreview(true)}
-                  className="px-6 py-3 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 text-gray-900 dark:text-white font-semibold inline-flex items-center gap-2 hover:shadow-xl transition-all duration-300 hover:scale-105"
-                >
-                  <FiEye size={18} />
-                  Resume
-                </button>
-              )}
             </div>
 
-            {/* Social Links - Enhanced */}
-            <div ref={socialRef} className="flex items-center gap-3 pt-3">
-              <div className="flex gap-3">
-                {profile.github && (
-                  <a
-                    href={`https://github.com/${profile.github}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="social-icon group p-2.5 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 hover:from-blue-500 hover:to-purple-500 text-gray-700 dark:text-gray-300 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-110"
-                    aria-label="GitHub"
-                  >
-                    <FiGithub size={18} className="group-hover:scale-110 transition-transform" />
-                  </a>
-                )}
-                {profile.linkedin && (
-                  <a
-                    href={`https://linkedin.com/in/${profile.linkedin}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="social-icon group p-2.5 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 hover:from-blue-500 hover:to-purple-500 text-gray-700 dark:text-gray-300 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-110"
-                    aria-label="LinkedIn"
-                  >
-                    <FiLinkedin size={18} className="group-hover:scale-110 transition-transform" />
-                  </a>
-                )}
-                {profile.email && (
-                  <a
-                    href={`mailto:${profile.email}`}
-                    className="social-icon group p-2.5 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 hover:from-blue-500 hover:to-purple-500 text-gray-700 dark:text-gray-300 hover:text-white transition-all duration-300 hover:shadow-lg hover:scale-110"
-                    aria-label="Email"
-                  >
-                    <FiMail size={18} className="group-hover:scale-110 transition-transform" />
-                  </a>
-                )}
-              </div>
+            <div ref={socialRef} className="flex items-center gap-3 pt-2">
+              {profile?.github && (
+                <a
+                  href={normalizeProfileUrl(
+                    profile.github,
+                    "https://github.com/"
+                  )}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-icon rounded-lg border border-slate-200 bg-white p-3 text-slate-700 shadow-sm transition-colors hover:border-primary-500 hover:text-primary-700 dark:!border-dark-700 dark:!bg-dark-800 dark:!text-gray-300 dark:!shadow-none dark:hover:!border-primary-300 dark:hover:!text-primary-200"
+                  aria-label="GitHub"
+                >
+                  <FiGithub size={18} />
+                </a>
+              )}
+              {profile?.linkedin && (
+                <a
+                  href={normalizeProfileUrl(
+                    profile.linkedin,
+                    "https://linkedin.com/in/"
+                  )}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-icon rounded-lg border border-slate-200 bg-white p-3 text-slate-700 shadow-sm transition-colors hover:border-primary-500 hover:text-primary-700 dark:!border-dark-700 dark:!bg-dark-800 dark:!text-gray-300 dark:!shadow-none dark:hover:!border-primary-300 dark:hover:!text-primary-200"
+                  aria-label="LinkedIn"
+                >
+                  <FiLinkedin size={18} />
+                </a>
+              )}
+              {profile?.email && (
+                <a
+                  href={`mailto:${profile.email}`}
+                  className="social-icon rounded-lg border border-slate-200 bg-white p-3 text-slate-700 shadow-sm transition-colors hover:border-primary-500 hover:text-primary-700 dark:!border-dark-700 dark:!bg-dark-800 dark:!text-gray-300 dark:!shadow-none dark:hover:!border-primary-300 dark:hover:!text-primary-200"
+                  aria-label="Email"
+                >
+                  <FiMail size={18} />
+                </a>
+              )}
             </div>
           </div>
 
-          {/* Right Side - Profile Image */}
-          <div ref={imageRef} className="order-1 lg:order-2 flex justify-center items-center">
-            <div className="relative">
-              {/* Multiple animated blob backgrounds for depth */}
-              <motion.div
-                animate={{
-                  scale: [1, 1.08, 1],
-                  rotate: [0, 10, -10, 0],
-                }}
-                transition={{
-                  duration: 15,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="absolute inset-0 -z-30 opacity-40"
-                style={{
-                  background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                  borderRadius: "60% 40% 30% 70% / 60% 30% 70% 40%",
-                  filter: "blur(20px)",
-                  transform: "scale(1.3)",
-                }}
-              />
-              
-              <motion.div
-                animate={{
-                  scale: [1, 1.1, 1],
-                  rotate: [0, -8, 8, 0],
-                }}
-                transition={{
-                  duration: 12,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: 1,
-                }}
-                className="absolute inset-0 -z-20 opacity-50"
-                style={{
-                  background: "linear-gradient(225deg, #f093fb 0%, #f5576c 100%)",
-                  borderRadius: "50% 50% 40% 60% / 40% 60% 40% 60%",
-                  filter: "blur(15px)",
-                  transform: "scale(1.25)",
-                }}
-              />
-
-              <motion.div
-                animate={{
-                  scale: [1, 1.06, 1],
-                  rotate: [0, 5, -5, 0],
-                }}
-                transition={{
-                  duration: 10,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="absolute inset-0 -z-10"
-                style={{
-                  background: "linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)",
-                  borderRadius: "60% 40% 30% 70% / 60% 30% 70% 40%",
-                  filter: "blur(2px)",
-                  transform: "scale(1.15)",
-                }}
-              />
-
-              <div 
-                className="relative w-[20rem] h-[20rem] md:w-[24rem] md:h-[24rem] lg:w-[28rem] lg:h-[28rem] overflow-hidden shadow-2xl"
-                style={{
-                  borderRadius: "40% 60% 60% 40% / 60% 40% 60% 40%",
-                }}
-              >
-                {profile.profileImage?.url ? (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <img
-                      src={profile.profileImage.url}
-                      alt={profile.name}
-                      className="w-full h-full object-contain"
-                    />
-                  </div>
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 flex items-center justify-center">
-                    <span className="text-8xl md:text-9xl font-bold text-gray-400 dark:text-gray-600">
-                      {profile.name?.charAt(0) || "?"}
-                    </span>
-                  </div>
-                )}
-                
-                <motion.div
-                  animate={{
-                    x: ["-100%", "100%"],
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: "linear",
-                    repeatDelay: 2,
-                  }}
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                  style={{
-                    transform: "skewX(-20deg)",
-                  }}
-                />
+          <div ref={workspaceRef} className="relative">
+            <div className="rounded-lg border border-slate-200 bg-white/90 shadow-[0_24px_80px_rgba(15,23,42,0.12)] backdrop-blur dark:!border-dark-700 dark:!bg-dark-800 dark:!shadow-[0_24px_80px_rgba(0,0,0,0.35)]">
+              <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3 dark:!border-dark-700">
+                <div className="flex items-center gap-2">
+                  <span className="h-3 w-3 rounded-full bg-red-400" />
+                  <span className="h-3 w-3 rounded-full bg-amber-400" />
+                  <span className="h-3 w-3 rounded-full bg-emerald-400" />
+                </div>
+                <div className="font-mono text-xs text-slate-500 dark:text-gray-400">
+                  engineer.profile.ts
+                </div>
               </div>
 
-              {/* Floating animation shadow */}
-              <motion.div
-                animate={{
-                  y: [0, -20, 0],
-                  scale: [1, 0.9, 1],
-                  opacity: [0.3, 0.15, 0.3],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-4/5 h-12 bg-gray-900/20 dark:bg-gray-100/10 rounded-full blur-2xl"
-              />
+              <div className="grid gap-0 md:grid-cols-2">
+                <div className="border-b border-slate-200 p-5 dark:!border-dark-700 md:border-b-0 md:border-r">
+                  <pre className="overflow-hidden whitespace-pre-wrap font-mono text-sm leading-7 text-slate-700 dark:text-gray-300 md:text-[15px]">
+                    <code>
+                      <span className="text-slate-500 dark:text-gray-500">const</span>{" "}
+                      <span className="text-primary-700 dark:text-primary-300">engineer</span>{" "}
+                      <span className="text-slate-500 dark:text-gray-500">=</span>{" "}
+                      <span className="text-slate-950 dark:text-gray-100">{"{"}</span>
+                      {"\n  "}
+                      <span className="text-slate-500 dark:text-gray-400">name:</span>{" "}
+                      <span className="text-emerald-700 dark:text-emerald-300">"{name}"</span>,
+                      {"\n  "}
+                      <span className="text-slate-500 dark:text-gray-400">role:</span>{" "}
+                      <span className="text-emerald-700 dark:text-emerald-300">"{activeRole}"</span>,
+                      {"\n  "}
+                      <span className="text-slate-500 dark:text-gray-400">focus:</span>{" "}
+                      <span className="text-slate-950 dark:text-gray-100">[</span>
+                      <span className="text-emerald-700 dark:text-emerald-300">"APIs"</span>,{" "}
+                      <span className="text-emerald-700 dark:text-emerald-300">"data"</span>
+                      <span className="text-slate-950 dark:text-gray-100">]</span>,
+                      {"\n  "}
+                      <span className="text-slate-500 dark:text-gray-400">ships:</span>{" "}
+                      <span className="text-slate-950 dark:text-gray-100">[</span>
+                      <span className="text-emerald-700 dark:text-emerald-300">"reliable"</span>
+                      <span className="text-slate-950 dark:text-gray-100">]</span>
+                      {"\n"}
+                      <span className="text-slate-950 dark:text-gray-100">{"}"}</span>;
+                      {"\n\n"}
+                      <span className="text-accent-700 dark:text-accent-300">export default</span>{" "}
+                      <span className="text-primary-700 dark:text-primary-300">build</span>
+                      <span className="text-slate-950 dark:text-gray-100">(engineer)</span>;
+                    </code>
+                  </pre>
+                </div>
 
-              {/* Decorative dots */}
-              <motion.div
-                animate={{
-                  scale: [1, 1.2, 1],
-                  opacity: [0.5, 1, 0.5],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="absolute -top-4 -left-4 w-20 h-20 bg-blue-500/30 rounded-full blur-xl"
-              />
-              
-              <motion.div
-                animate={{
-                  scale: [1, 1.3, 1],
-                  opacity: [0.4, 0.8, 0.4],
-                }}
-                transition={{
-                  duration: 2.5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: 0.5,
-                }}
-                className="absolute -bottom-6 -right-6 w-24 h-24 bg-purple-500/30 rounded-full blur-xl"
-              />
+                <div className="flex flex-col justify-between p-4">
+                  <div className="overflow-hidden rounded-lg border border-slate-200 bg-slate-50 dark:!border-dark-700 dark:!bg-dark-700">
+                    <div className="aspect-[4/5] bg-slate-100 dark:bg-dark-700">
+                      {profileImage ? (
+                        <img
+                          src={profileImage}
+                          alt={name}
+                          className="h-full w-full object-contain"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center">
+                          <span className="text-7xl font-bold text-primary-700 dark:text-primary-300">
+                            {name.charAt(0)}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="mt-4 rounded-lg border border-emerald-200 bg-emerald-50 p-3 font-mono text-xs text-emerald-900 dark:!border-dark-700 dark:!bg-dark-700 dark:!text-emerald-100">
+                    <div className="mb-2 flex items-center gap-2 text-emerald-700 dark:text-emerald-300">
+                      <FiCode size={14} />
+                      production-ready
+                    </div>
+                    <div className="space-y-1 text-slate-700 dark:text-gray-300">
+                      <div>status: available</div>
+                      <div>tests: passing</div>
+                      <div>deploy: stable</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid gap-3 border-t border-slate-200 p-4 dark:!border-dark-700 md:grid-cols-3">
+                {stackHighlights.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <div
+                      key={item.label}
+                      className="rounded-lg border border-slate-200 bg-slate-50 p-3 dark:!border-dark-700 dark:!bg-dark-700"
+                    >
+                      <div className="mb-2 flex items-center gap-2 text-primary-700 dark:text-primary-200">
+                        <Icon size={16} />
+                        <span className="font-mono text-xs">{item.label}</span>
+                      </div>
+                      <p className="text-sm leading-6 text-slate-700 dark:text-gray-300">
+                        {item.value}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Resume Preview Modal */}
-      {showResumePreview && profile.resume && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/80c backdrop-blur-sm z-50 flex items-center justify-center p-4"
-          onClick={() => setShowResumePreview(false)}
-        >
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            className="relative w-full max-w-6xl h-[90vh] bg-white dark:bg-dark-800 shadow-2xl overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Header */}
-            <div className="bg-gray-800 dark:bg-dark-700 px-6 py-4 flex justify-between items-center border-b border-gray-700 dark:border-dark-600">
-              <div className="flex items-center gap-3">
-                <FiEye className="text-white" size={24} />
-                <div>
-                  <h3 className="text-lg font-semibold text-white">
-                    Resume Preview
-                  </h3>
-                  <p className="text-sm text-white/80">
-                    {profile.resume.filename || "document.pdf"}
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={handleDownloadResume}
-                  className="px-4 py-2 bg-gray-700 hover:bg-gray-600 dark:bg-dark-600 dark:hover:bg-dark-500 text-white flex items-center gap-2 transition-all"
-                >
-                  <FiDownload size={18} />
-                  Download
-                </button>
-                <button
-                  onClick={() => setShowResumePreview(false)}
-                  className="w-10 h-10 bg-gray-700 hover:bg-gray-600 dark:bg-dark-600 dark:hover:bg-dark-500 flex items-center justify-center text-white transition-all"
-                >
-                  <FiX size={20} />
-                </button>
-              </div>
-            </div>
-
-            {/* PDF Content */}
-            <div className="w-full h-[calc(100%-4rem)] bg-gray-100 dark:bg-dark-900">
-              {pdfLoadError ? (
-                <div className="flex flex-col items-center justify-center h-full p-8 text-center">
-                  <div className="w-20 h-20 bg-gray-800 dark:bg-dark-600 flex items-center justify-center mb-6">
-                    <FiDownload className="text-white" size={32} />
-                  </div>
-                  <h4 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
-                    Preview Not Available
-                  </h4>
-                  <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-md">
-                    Your browser doesn't support inline PDF viewing. Download
-                    the file to view it.
-                  </p>
-                  <button
-                    onClick={handleDownloadResume}
-                    className="px-6 py-3 bg-gray-800 dark:bg-dark-600 text-white flex items-center gap-2 font-semibold hover:bg-gray-700 dark:hover:bg-dark-500 transition-all"
-                  >
-                    <FiDownload size={20} />
-                    Download Resume
-                  </button>
-                </div>
-              ) : (
-                <iframe
-                  src={`${profile.resume.url}#toolbar=0&navpanes=0`}
-                  className="w-full h-full border-0"
-                  title="Resume Preview"
-                  onError={() => setPdfLoadError(true)}
-                />
-              )}
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
     </section>
   );
 };

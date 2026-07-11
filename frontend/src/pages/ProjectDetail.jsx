@@ -67,7 +67,7 @@ const ProjectDetail = () => {
   }
 
   return (
-    <div className="min-h-screen pt-20 bg-gray-50 dark:bg-dark-900">
+    <div className="min-h-screen bg-stone-50 pt-20 dark:bg-dark-900">
       <div className="section">
         <div className="container">
           {/* Back Button */}
@@ -78,7 +78,7 @@ const ProjectDetail = () => {
           >
             <Link
               to="/projects"
-              className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 hover:gap-3 transition-all duration-200 font-medium"
+              className="inline-flex items-center gap-2 font-medium text-primary-700 transition-colors duration-200 hover:text-primary-900 dark:text-primary-300 dark:hover:text-primary-200"
             >
               <FiArrowLeft size={20} />
               Back to Projects
@@ -94,11 +94,17 @@ const ProjectDetail = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="card-3d overflow-hidden"
               >
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-96 object-cover"
-                />
+                {project.image ? (
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="h-96 w-full object-cover"
+                  />
+                ) : (
+                  <div className="flex h-96 w-full items-center justify-center bg-stone-100 text-2xl font-semibold text-primary-700 dark:bg-dark-700 dark:text-primary-300">
+                    {project.title}
+                  </div>
+                )}
               </motion.div>
 
               {/* Project Title & Description */}
@@ -110,17 +116,12 @@ const ProjectDetail = () => {
               >
                 <div className="flex items-start justify-between mb-6">
                   <div>
-                    <h1
-                      className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-4"
-                      style={{
-                        textShadow: "2px 2px 4px rgba(0, 0, 0, 0.1)",
-                      }}
-                    >
+                    <h1 className="mb-4 text-4xl font-bold text-gray-900 dark:text-gray-100 md:text-5xl">
                       {project.title}
                     </h1>
                     {project.featured && (
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-yellow-100 to-orange-100 dark:from-yellow-900/30 dark:to-orange-900/30 text-yellow-700 dark:text-yellow-300">
-                        ⭐ Featured
+                      <span className="inline-flex items-center rounded-md border border-accent-200 bg-accent-50 px-3 py-1 text-sm font-medium text-accent-800 dark:border-accent-800 dark:bg-accent-900/30 dark:text-accent-200">
+                        Featured
                       </span>
                     )}
                   </div>
@@ -146,10 +147,7 @@ const ProjectDetail = () => {
                   {project.techStack?.map((tech, index) => (
                     <span
                       key={index}
-                      className="px-4 py-2 rounded-lg bg-gradient-to-r from-primary-100 to-purple-100 dark:from-primary-900/30 dark:to-purple-900/30 text-primary-700 dark:text-primary-300 font-medium"
-                      style={{
-                        boxShadow: "0 2px 8px rgba(59, 130, 246, 0.2)",
-                      }}
+                      className="rounded-md bg-primary-50 px-4 py-2 font-medium text-primary-800 dark:bg-primary-900/30 dark:text-primary-200"
                     >
                       {tech}
                     </span>
@@ -176,7 +174,7 @@ const ProjectDetail = () => {
                       href={project.links.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-3 p-3 rounded-lg bg-gray-100 dark:bg-dark-700 hover:bg-gray-200 dark:hover:bg-dark-600 transition-colors duration-200"
+                      className="flex items-center gap-3 rounded-lg bg-stone-100 p-3 transition-colors duration-200 hover:bg-stone-200 dark:bg-dark-700 dark:hover:bg-dark-600"
                     >
                       <FiGithub className="text-xl text-gray-700 dark:text-gray-300" />
                       <span className="font-medium text-gray-900 dark:text-gray-100">
@@ -189,7 +187,7 @@ const ProjectDetail = () => {
                       href={project.links.live}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-3 p-3 rounded-lg bg-primary-600 hover:bg-primary-700 text-white transition-colors duration-200"
+                      className="flex items-center gap-3 rounded-lg bg-primary-700 p-3 text-white transition-colors duration-200 hover:bg-primary-800 dark:bg-primary-400 dark:text-dark-900 dark:hover:bg-primary-300"
                     >
                       <FiExternalLink className="text-xl" />
                       <span className="font-medium">View Live Demo</span>

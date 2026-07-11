@@ -19,7 +19,7 @@ const CodingStatsCard = ({ profile, index }) => {
 
   const platformColors = {
     leetcode: "from-yellow-600 to-orange-600",
-    codechef: "from-brown-600 to-amber-800",
+    codechef: "from-amber-700 to-orange-800",
     codeforces: "from-blue-600 to-cyan-600",
     hackerrank: "from-green-600 to-emerald-600",
     github: "from-gray-700 to-gray-900",
@@ -55,7 +55,7 @@ const CodingStatsCard = ({ profile, index }) => {
                 }}
                 viewport={{ once: true }}
                 transition={{ duration: 1, delay: 0.5 }}
-                className="h-full bg-gradient-to-r from-primary-600 to-purple-600"
+                className="h-full bg-primary-600"
               ></motion.div>
             </div>
           </div>
@@ -102,7 +102,7 @@ const CodingStatsCard = ({ profile, index }) => {
       return (
         <>
           <div className="grid grid-cols-2 gap-4">
-            <div className="text-center p-4 rounded-lg bg-gradient-to-br from-primary-50 to-purple-50 dark:from-primary-900/20 dark:to-purple-900/20">
+            <div className="rounded-lg bg-primary-50 p-4 text-center dark:bg-primary-900/20">
               <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
                 Current Rating
               </div>
@@ -110,11 +110,11 @@ const CodingStatsCard = ({ profile, index }) => {
                 {stats.rating || 0}
               </div>
             </div>
-            <div className="text-center p-4 rounded-lg bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20">
+            <div className="rounded-lg bg-accent-50 p-4 text-center dark:bg-accent-900/20">
               <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">
                 Max Rating
               </div>
-              <div className="text-3xl font-bold text-purple-600">
+              <div className="text-3xl font-bold text-accent-600">
                 {stats.maxRating || 0}
               </div>
             </div>
@@ -168,7 +168,7 @@ const CodingStatsCard = ({ profile, index }) => {
             <div className="text-xs text-gray-600 dark:text-gray-400 mb-1">
               Followers
             </div>
-            <div className="text-2xl font-bold text-purple-600">
+            <div className="text-2xl font-bold text-accent-600">
               {stats.followers || 0}
             </div>
           </div>
@@ -191,7 +191,7 @@ const CodingStatsCard = ({ profile, index }) => {
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       whileHover={{ y: -5 }}
-      className="card p-6 hover:shadow-xl transition-all duration-300"
+      className="card p-6 transition-all duration-200"
     >
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">

@@ -50,7 +50,7 @@ const BlogDetail = () => {
           <div className="animate-pulse">
             <div className="h-8 bg-gray-300 dark:bg-dark-700 rounded w-1/3 mb-4"></div>
             <div className="h-12 bg-gray-300 dark:bg-dark-700 rounded w-full mb-4"></div>
-            <div className="h-96 bg-gray-300 dark:bg-dark-700 rounded-2xl mb-8"></div>
+            <div className="mb-8 h-96 rounded-lg bg-gray-300 dark:bg-dark-700"></div>
             <div className="space-y-3">
               <div className="h-4 bg-gray-300 dark:bg-dark-700 rounded"></div>
               <div className="h-4 bg-gray-300 dark:bg-dark-700 rounded"></div>
@@ -89,7 +89,7 @@ const BlogDetail = () => {
         {/* Back Button */}
         <Link
           to="/blog"
-          className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 hover:gap-3 transition-all mb-8"
+          className="mb-8 inline-flex items-center gap-2 font-medium text-primary-700 transition-colors hover:text-primary-900 dark:text-primary-300 dark:hover:text-primary-200"
         >
           <FiArrowLeft /> Back to Blog
         </Link>
@@ -131,7 +131,7 @@ const BlogDetail = () => {
                 {blog.tags.map((tag, i) => (
                   <span
                     key={i}
-                    className="px-3 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-full text-sm"
+                    className="rounded-md bg-primary-50 px-3 py-1 text-sm text-primary-800 dark:bg-primary-900/30 dark:text-primary-200"
                   >
                     #{tag}
                   </span>
@@ -151,7 +151,7 @@ const BlogDetail = () => {
               <img
                 src={blog.coverImage || blog.image}
                 alt={blog.title}
-                className="w-full h-[500px] object-cover rounded-2xl shadow-2xl"
+                className="h-[500px] w-full rounded-lg object-cover shadow-sm"
               />
             </motion.div>
           )}

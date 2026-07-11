@@ -94,13 +94,13 @@ const Blog = () => {
                     to={`/blog/${blog.slug || blog._id}`}
                     className="block group"
                   >
-                    <div className="card overflow-hidden h-full hover:shadow-2xl transition-all duration-300">
+                    <div className="card h-full overflow-hidden transition-all duration-200">
                       {coverImage && (
                         <div className="relative h-48 overflow-hidden">
                           <img
                             src={coverImage}
                             alt={blog.title}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                           />
                         </div>
                       )}

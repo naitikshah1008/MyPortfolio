@@ -26,14 +26,14 @@ const CodingProfilesSection = ({ profiles = [], loading = true }) => {
   const getPlatformColor = (platform) => {
     const colors = {
       leetcode: "from-yellow-500 to-orange-500",
-      codechef: "from-brown-600 to-orange-700",
+      codechef: "from-amber-700 to-orange-700",
       codeforces: "from-blue-600 to-blue-800",
       hackerrank: "from-green-500 to-green-700",
       github: "from-gray-700 to-gray-900",
       geeksforgeeks: "from-green-600 to-green-800",
       interviewbit: "from-blue-600 to-blue-800",
     };
-    return colors[platform] || "from-primary-600 to-purple-600";
+    return colors[platform] || "from-primary-600 to-primary-800";
   };
 
   if (loading || profiles.length === 0) {
@@ -52,9 +52,7 @@ const CodingProfilesSection = ({ profiles = [], loading = true }) => {
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-gray-100">
             Coding{" "}
-            <span className="bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent">
-              Profiles
-            </span>
+            <span className="gradient-text">Profiles</span>
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
             Follow my journey on competitive programming platforms
@@ -72,7 +70,7 @@ const CodingProfilesSection = ({ profiles = [], loading = true }) => {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: index * 0.1 }}
-              whileHover={{ scale: 1.05, y: -5 }}
+              whileHover={{ y: -4 }}
               className="card p-6 text-center group relative overflow-hidden"
             >
               {/* Gradient background on hover */}
@@ -85,7 +83,7 @@ const CodingProfilesSection = ({ profiles = [], loading = true }) => {
               {/* Icon */}
               <div className="relative mb-4 flex justify-center">
                 <div
-                  className={`p-4 rounded-full bg-gradient-to-br ${getPlatformColor(
+                  className={`rounded-lg bg-gradient-to-br p-4 ${getPlatformColor(
                     profile.platform
                   )} text-white`}
                 >

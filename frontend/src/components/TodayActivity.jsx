@@ -20,14 +20,14 @@ const TodayActivity = ({ codingProfiles, onUpdate }) => {
   const getPlatformIcon = (platform) => {
     const icons = {
       leetcode: <SiLeetcode className="text-yellow-500" size={24} />,
-      codechef: <SiCodechef className="text-brown-600" size={24} />,
+      codechef: <SiCodechef className="text-amber-700" size={24} />,
       codeforces: <SiCodeforces className="text-blue-600" size={24} />,
       hackerrank: <SiHackerrank className="text-green-600" size={24} />,
       github: <FiGithub className="text-gray-900 dark:text-white" size={24} />,
       geeksforgeeks: <SiGeeksforgeeks className="text-green-700" size={24} />,
       interviewbit: <FiBookOpen className="text-blue-700" size={24} />,
       codingninja: <FiCode className="text-orange-600" size={24} />,
-      naukri: <FiCode className="text-purple-600" size={24} />,
+      naukri: <FiCode className="text-accent-600" size={24} />,
     };
     return icons[platform] || <FiCode size={24} />;
   };
@@ -100,11 +100,11 @@ const TodayActivity = ({ codingProfiles, onUpdate }) => {
               transition={{ delay: index * 0.05 }}
               onClick={() => handleTogglePlatform(profile._id, isSolved)}
               className={`
-                relative p-4 rounded-xl border-2 transition-all duration-300 cursor-pointer
+                relative cursor-pointer rounded-lg border p-4 transition-all duration-200
                 ${
                   isSolved
-                    ? "bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-300 dark:border-green-700 shadow-lg shadow-green-100 dark:shadow-green-900/20"
-                    : "bg-white dark:bg-dark-800 border-gray-200 dark:border-dark-700 hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-md"
+                    ? "border-green-300 bg-green-50 dark:border-green-700 dark:bg-green-900/20"
+                    : "border-gray-200 bg-white hover:border-primary-300 dark:border-dark-700 dark:bg-dark-800 dark:hover:border-primary-600"
                 }
                 ${updating ? "opacity-50 pointer-events-none" : ""}
               `}
