@@ -53,7 +53,7 @@ const Hero = () => {
   const name = profile?.name || "Naitik Shah";
   const bio = heroSummary;
   const roles = profile?.roles?.length > 0 ? profile.roles : fallbackRoles;
-  const activeRole = displayedText || roles[currentRoleIndex % roles.length];
+  const activeRole = displayedText;
   const profileImage = profile?.profileImage?.url;
 
   useEffect(() => {
