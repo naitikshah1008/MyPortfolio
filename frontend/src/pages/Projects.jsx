@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import ProjectCard from "../components/ProjectCard";
-import { PROJECT_CATEGORIES, formatProjectCategory } from "../utils/constants";
+import { PROJECT_FILTERS } from "../utils/constants";
 import { getCachedProjects, loadProjects } from "../utils/projects";
 
 const Projects = () => {
@@ -17,11 +17,15 @@ const Projects = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const categories = ["all", ...PROJECT_CATEGORIES];
+  const categories = PROJECT_FILTERS;
+  const selectedCategory =
+    categories.find((category) => category.id === filter) || categories[0];
   const visibleProjects =
     filter === "all"
       ? projects
-      : projects.filter((project) => project.category === filter);
+      : projects.filter((project) =>
+          selectedCategory.categories.includes(project.category)
+        );
 
   return (
     <div className="min-h-screen pt-20">
@@ -37,7 +41,8 @@ const Projects = () => {
               My <span className="gradient-text">Projects</span>
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-400">
-              Explore my latest work and creations
+              Software projects across full-stack systems, data workflows,
+              AI/ML, and polished web experiences.
             </p>
           </motion.div>
 
@@ -45,15 +50,15 @@ const Projects = () => {
           <div className="flex flex-wrap justify-center gap-4 mb-12">
             {categories.map((cat) => (
               <button
-                key={cat}
-                onClick={() => setFilter(cat)}
+                key={cat.id}
+                onClick={() => setFilter(cat.id)}
                 className={`px-6 py-2 rounded-lg font-medium transition-all duration-200 ${
-                  filter === cat
+                  filter === cat.id
                     ? "bg-primary-700 text-white shadow-sm dark:bg-primary-400 dark:text-dark-900"
                     : "bg-stone-200 text-gray-700 hover:bg-stone-300 dark:bg-dark-700 dark:text-gray-300 dark:hover:bg-dark-600"
                 }`}
               >
-                {formatProjectCategory(cat)}
+                {cat.label}
               </button>
             ))}
           </div>

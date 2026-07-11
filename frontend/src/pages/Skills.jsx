@@ -3,6 +3,22 @@ import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import SkillCard from "../components/SkillCard";
 import { getCachedSkills, loadSkills } from "../utils/skills";
+import { SKILL_DISPLAY_ORDER, SKILL_FILTERS } from "../utils/constants";
+
+const getSkillRank = (skillName) => {
+  const normalizedName = skillName?.toLowerCase();
+  const index = SKILL_DISPLAY_ORDER.findIndex(
+    (name) => name.toLowerCase() === normalizedName
+  );
+  return index === -1 ? SKILL_DISPLAY_ORDER.length : index;
+};
+
+const sortSkillsForDisplay = (items) =>
+  [...items].sort((a, b) => {
+    const rankDifference = getSkillRank(a.name) - getSkillRank(b.name);
+    if (rankDifference !== 0) return rankDifference;
+    return (b.level || 0) - (a.level || 0);
+  });
 
 const Skills = () => {
   const [skills, setSkills] = useState(getCachedSkills);
@@ -16,26 +32,21 @@ const Skills = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const categories = [
-    { id: "all", label: "All Skills" },
-    { id: "languages", label: "Languages" },
-    { id: "backend", label: "Backend" },
-    { id: "distributed systems", label: "Distributed Systems" },
-    { id: "ml/ai", label: "ML/AI" },
-    { id: "cloud & devops", label: "Cloud & DevOps" },
-    { id: "tools & infrastructure", label: "Tools & Infrastructure" },
-    { id: "database", label: "Database" },
-    { id: "frontend", label: "Frontend" },
-  ];
+  const categories = SKILL_FILTERS;
+  const selectedCategory =
+    categories.find((cat) => cat.id === activeCategory) || categories[0];
 
-  const filteredSkills =
+  const filteredSkills = sortSkillsForDisplay(
     activeCategory === "all"
       ? skills
-      : skills.filter((skill) => skill.category === activeCategory);
+      : skills.filter((skill) =>
+          selectedCategory.categories.includes(skill.category)
+        )
+  );
 
   const skillsByCategory = categories.reduce((acc, cat) => {
     if (cat.id === "all") return acc;
-    acc[cat.id] = skills.filter((s) => s.category === cat.id);
+    acc[cat.id] = skills.filter((s) => cat.categories.includes(s.category));
     return acc;
   }, {});
 
@@ -53,7 +64,8 @@ const Skills = () => {
               My <span className="gradient-text">Skills</span>
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Technologies and tools I work with to build amazing projects
+              A practical stack across product UI, backend services, data,
+              cloud, and AI-assisted workflows.
             </p>
           </motion.div>
 
@@ -129,16 +141,19 @@ const Skills = () => {
               </div>
               {Object.entries(skillsByCategory)
                 .slice(0, 3)
-                .map(([cat, items]) => (
-                  <div key={cat} className="card p-6 text-center">
-                    <div className="text-4xl font-bold gradient-text mb-2">
-                      {items.length}
+                .map(([cat, items]) => {
+                  const category = categories.find((item) => item.id === cat);
+                  return (
+                    <div key={cat} className="card p-6 text-center">
+                      <div className="text-4xl font-bold gradient-text mb-2">
+                        {items.length}
+                      </div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                        {category?.label || cat}
+                      </div>
                     </div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400 capitalize">
-                      {cat}
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
             </motion.div>
           )}
         </div>

@@ -3,7 +3,6 @@ import {
   FiArrowRight,
   FiCode,
   FiCpu,
-  FiDatabase,
   FiGithub,
   FiLinkedin,
   FiMail,
@@ -16,17 +15,20 @@ import useProfileStore from "../store/profileStore";
 import { loadGsapWithScrollTrigger } from "../utils/animations";
 
 const fallbackRoles = [
-  "Full Stack Developer",
-  "Backend Engineer",
   "Software Engineer",
-  "MERN Stack Developer",
+  "Full Stack Developer",
+  "Product-minded Engineer",
+  "Systems Builder",
 ];
 
 const stackHighlights = [
-  { icon: FiServer, label: "Backend", value: "Java, Spring Boot, APIs" },
-  { icon: FiDatabase, label: "Data", value: "PostgreSQL, Redis, Kafka" },
-  { icon: FiCpu, label: "Systems", value: "Reliable, scalable workflows" },
+  { icon: FiCode, label: "Product", value: "React, TypeScript, UX flows" },
+  { icon: FiServer, label: "Services", value: "Java, Spring Boot, APIs" },
+  { icon: FiCpu, label: "Systems", value: "Kafka, Docker, Cloud" },
 ];
+
+const heroSummary =
+  "I’m Naitik Shah, a Software Engineer who builds full-stack products across user interfaces, backend services, data workflows, and AI-powered features. I focus on clean architecture, fast user experiences, and reliable systems that are practical to ship and maintain.";
 
 const normalizeProfileUrl = (value, baseUrl) => {
   if (!value) return "";
@@ -46,9 +48,7 @@ const Hero = () => {
   const socialRef = useRef(null);
 
   const name = profile?.name || "Naitik Shah";
-  const bio =
-    profile?.bio ||
-    "I build practical web products with a focus on reliable systems, clean interfaces, and thoughtful user flows.";
+  const bio = heroSummary;
   const roles = profile?.roles?.length > 0 ? profile.roles : fallbackRoles;
   const activeRole = displayedText || roles[currentRoleIndex % roles.length];
   const profileImage = profile?.profileImage?.url;
@@ -264,12 +264,14 @@ const Hero = () => {
                       {"\n  "}
                       <span className="text-slate-500 dark:text-gray-400">focus:</span>{" "}
                       <span className="text-slate-950 dark:text-gray-100">[</span>
-                      <span className="text-emerald-700 dark:text-emerald-300">"APIs"</span>,{" "}
-                      <span className="text-emerald-700 dark:text-emerald-300">"data"</span>
+                      <span className="text-emerald-700 dark:text-emerald-300">"product"</span>,{" "}
+                      <span className="text-emerald-700 dark:text-emerald-300">"systems"</span>,{" "}
+                      <span className="text-emerald-700 dark:text-emerald-300">"AI"</span>
                       <span className="text-slate-950 dark:text-gray-100">]</span>,
                       {"\n  "}
                       <span className="text-slate-500 dark:text-gray-400">ships:</span>{" "}
                       <span className="text-slate-950 dark:text-gray-100">[</span>
+                      <span className="text-emerald-700 dark:text-emerald-300">"usable"</span>,{" "}
                       <span className="text-emerald-700 dark:text-emerald-300">"reliable"</span>
                       <span className="text-slate-950 dark:text-gray-100">]</span>
                       {"\n"}
@@ -304,12 +306,12 @@ const Hero = () => {
                   <div className="mt-4 rounded-lg border border-emerald-200 bg-emerald-50 p-3 font-mono text-xs text-emerald-900 dark:!border-dark-700 dark:!bg-dark-700 dark:!text-emerald-100">
                     <div className="mb-2 flex items-center gap-2 text-emerald-700 dark:text-emerald-300">
                       <FiCode size={14} />
-                      production-ready
+                      shipping mindset
                     </div>
                     <div className="space-y-1 text-slate-700 dark:text-gray-300">
-                      <div>status: available</div>
-                      <div>tests: passing</div>
-                      <div>deploy: stable</div>
+                      <div>scope: product + systems</div>
+                      <div>style: clean, reliable</div>
+                      <div>goal: user impact</div>
                     </div>
                   </div>
                 </div>

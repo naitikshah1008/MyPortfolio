@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { formatSkillCategory } from "../utils/constants";
 
 const SkillCard = ({ skill }) => {
   const accentColor = skill.color || "#2d9c86";
@@ -41,7 +42,7 @@ const SkillCard = ({ skill }) => {
             {skill.level}%
           </motion.span>
           <span className="max-w-[60%] truncate text-right text-xs font-medium text-gray-500 dark:text-gray-400">
-            {skill.category}
+            {formatSkillCategory(skill.category)}
           </span>
         </div>
       </div>
