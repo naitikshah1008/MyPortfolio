@@ -8,6 +8,7 @@ import SkillForm from "../../components/SkillForm";
 import ConfirmDialog from "../../components/ConfirmDialog";
 import { invalidateHomepageCache } from "../../utils/homepage";
 import { invalidateSkillsCache } from "../../utils/skills";
+import { SKILL_FILTERS, formatSkillCategory } from "../../utils/constants";
 
 const Skills = () => {
   const [skills, setSkills] = useState([]);
@@ -18,17 +19,7 @@ const Skills = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [skillToDelete, setSkillToDelete] = useState(null);
 
-  const categories = [
-    "all",
-    "languages",
-    "backend",
-    "distributed systems",
-    "ml/ai",
-    "cloud & devops",
-    "tools & infrastructure",
-    "database",
-    "frontend",
-  ];
+  const categories = SKILL_FILTERS;
 
   useEffect(() => {
     fetchSkills();
@@ -83,7 +74,11 @@ const Skills = () => {
   const filteredSkills =
     filter === "all"
       ? skills
-      : skills.filter((skill) => skill.category === filter);
+      : skills.filter((skill) => {
+          const category = categories.find((item) => item.id === filter);
+          return category?.categories.includes(skill.category);
+        });
+  const selectedCategory = categories.find((item) => item.id === filter);
 
   return (
     <div>
@@ -107,15 +102,15 @@ const Skills = () => {
       <div className="flex gap-2 mb-6 overflow-x-auto">
         {categories.map((cat) => (
           <button
-            key={cat}
-            onClick={() => setFilter(cat)}
+            key={cat.id}
+            onClick={() => setFilter(cat.id)}
             className={`px-4 py-2 rounded-lg font-medium transition-colors whitespace-nowrap ${
-              filter === cat
+              filter === cat.id
                 ? "bg-primary-600 text-white"
                 : "bg-gray-100 dark:bg-dark-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-dark-600"
             }`}
           >
-            {cat.charAt(0).toUpperCase() + cat.slice(1)}
+            {cat.label}
           </button>
         ))}
       </div>
@@ -138,7 +133,7 @@ const Skills = () => {
           <p className="text-gray-600 dark:text-gray-400 mb-4">
             {filter === "all"
               ? "No skills yet. Add your first skill!"
-              : `No skills in ${filter} category.`}
+              : `No skills in ${selectedCategory?.label || filter} category.`}
           </p>
           <button
             onClick={handleAdd}
@@ -171,7 +166,7 @@ const Skills = () => {
                   <div>
                     <h3 className="font-bold font-display">{skill.name}</h3>
                     <span className="text-xs text-gray-500 dark:text-gray-400 capitalize">
-                      {skill.category}
+                      {formatSkillCategory(skill.category)}
                     </span>
                   </div>
                 </div>

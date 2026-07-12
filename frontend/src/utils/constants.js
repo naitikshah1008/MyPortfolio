@@ -15,15 +15,41 @@ export const THEME = {
   DARK: "dark",
 };
 
-export const SKILL_CATEGORIES = [
-  "languages",
-  "backend",
-  "distributed systems",
-  "ml/ai",
-  "cloud & devops",
-  "tools & infrastructure",
-  "database",
-  "frontend",
+export const SKILL_CATEGORY_OPTIONS = [
+  {
+    value: "frontend & ui",
+    label: "Frontend & UI",
+    aliases: ["frontend"],
+  },
+  {
+    value: "backend & apis",
+    label: "Backend & APIs",
+    aliases: ["backend"],
+  },
+  {
+    value: "systems & cloud",
+    label: "Systems & Cloud",
+    aliases: [
+      "distributed systems",
+      "cloud & devops",
+      "tools & infrastructure",
+    ],
+  },
+  {
+    value: "data & storage",
+    label: "Data & Storage",
+    aliases: ["database"],
+  },
+  {
+    value: "ai/ml",
+    label: "AI/ML",
+    aliases: ["ml/ai"],
+  },
+  {
+    value: "languages",
+    label: "Languages",
+    aliases: [],
+  },
 ];
 
 export const SKILL_CATEGORY_LABELS = {
@@ -35,24 +61,26 @@ export const SKILL_CATEGORY_LABELS = {
   "tools & infrastructure": "Systems & Tooling",
   database: "Data & Storage",
   frontend: "Frontend & UI",
+  "frontend & ui": "Frontend & UI",
+  "backend & apis": "Backend & APIs",
+  "systems & cloud": "Systems & Cloud",
+  "data & storage": "Data & Storage",
+  "ai/ml": "AI/ML",
 };
 
+const getOptionValues = (option) => [option.value, ...(option.aliases || [])];
+
 export const SKILL_FILTERS = [
-  { id: "all", label: "All Skills", categories: SKILL_CATEGORIES },
-  { id: "frontend", label: "Frontend & UI", categories: ["frontend"] },
-  { id: "backend", label: "Backend & APIs", categories: ["backend"] },
   {
-    id: "systems-cloud",
-    label: "Systems & Cloud",
-    categories: [
-      "distributed systems",
-      "cloud & devops",
-      "tools & infrastructure",
-    ],
+    id: "all",
+    label: "All Skills",
+    categories: SKILL_CATEGORY_OPTIONS.flatMap(getOptionValues),
   },
-  { id: "data-storage", label: "Data & Storage", categories: ["database"] },
-  { id: "ai-ml", label: "AI/ML", categories: ["ml/ai"] },
-  { id: "languages", label: "Languages", categories: ["languages"] },
+  ...SKILL_CATEGORY_OPTIONS.map((option) => ({
+    id: option.value,
+    label: option.label,
+    categories: getOptionValues(option),
+  })),
 ];
 
 export const SKILL_DISPLAY_ORDER = [
@@ -78,34 +106,40 @@ export const SKILL_DISPLAY_ORDER = [
   "HTML",
 ];
 
-export const PROJECT_CATEGORIES = [
-  "web",
-  "mobile application",
-  "scientific visualization",
-  "web application",
-  "fullstack",
-  "ai/ml",
-  "other",
+export const PROJECT_CATEGORY_OPTIONS = [
+  {
+    value: "full-stack systems",
+    label: "Full-Stack Systems",
+    aliases: ["fullstack"],
+  },
+  {
+    value: "web applications",
+    label: "Web Applications",
+    aliases: ["web", "web application"],
+  },
+  {
+    value: "ai data visualization",
+    label: "AI, Data & Visualization",
+    aliases: ["ai/ml", "scientific visualization"],
+  },
+  {
+    value: "other builds",
+    label: "Other Builds",
+    aliases: ["mobile application", "other"],
+  },
 ];
 
 export const PROJECT_FILTERS = [
-  { id: "all", label: "All", categories: PROJECT_CATEGORIES },
-  { id: "fullstack", label: "Full-Stack Systems", categories: ["fullstack"] },
   {
-    id: "web-apps",
-    label: "Web Applications",
-    categories: ["web", "web application"],
+    id: "all",
+    label: "All",
+    categories: PROJECT_CATEGORY_OPTIONS.flatMap(getOptionValues),
   },
-  {
-    id: "ai-data",
-    label: "AI, Data & Visualization",
-    categories: ["ai/ml", "scientific visualization"],
-  },
-  {
-    id: "other-builds",
-    label: "Other Builds",
-    categories: ["mobile application", "other"],
-  },
+  ...PROJECT_CATEGORY_OPTIONS.map((option) => ({
+    id: option.value,
+    label: option.label,
+    categories: getOptionValues(option),
+  })),
 ];
 
 export const PROJECT_CATEGORY_LABELS = {
@@ -117,7 +151,25 @@ export const PROJECT_CATEGORY_LABELS = {
   fullstack: "Full-Stack System",
   "ai/ml": "AI/ML",
   other: "Other",
+  "full-stack systems": "Full-Stack Systems",
+  "web applications": "Web Applications",
+  "ai data visualization": "AI, Data & Visualization",
+  "other builds": "Other Builds",
 };
+
+export const getCanonicalProjectCategory = (category) =>
+  PROJECT_CATEGORY_OPTIONS.find((option) =>
+    getOptionValues(option).includes(category)
+  )?.value ||
+  category ||
+  PROJECT_CATEGORY_OPTIONS[0].value;
+
+export const getCanonicalSkillCategory = (category) =>
+  SKILL_CATEGORY_OPTIONS.find((option) =>
+    getOptionValues(option).includes(category)
+  )?.value ||
+  category ||
+  SKILL_CATEGORY_OPTIONS[0].value;
 
 export const formatSkillCategory = (category) =>
   SKILL_CATEGORY_LABELS[category] ||

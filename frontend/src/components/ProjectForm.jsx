@@ -4,6 +4,10 @@ import toast from "react-hot-toast";
 import api from "../utils/api";
 import { invalidateProjectsCache } from "../utils/projects";
 import { invalidateHomepageCache } from "../utils/homepage";
+import {
+  PROJECT_CATEGORY_OPTIONS,
+  getCanonicalProjectCategory,
+} from "../utils/constants";
 
 const ProjectForm = ({ project, onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
@@ -11,7 +15,7 @@ const ProjectForm = ({ project, onClose, onSuccess }) => {
     description: "",
     image: "",
     techStack: "",
-    category: "web",
+    category: PROJECT_CATEGORY_OPTIONS[0].value,
     featured: false,
     projectDate: "",
     links: {
@@ -32,7 +36,7 @@ const ProjectForm = ({ project, onClose, onSuccess }) => {
         description: project.description || "",
         image: project.image || "",
         techStack: project.techStack?.join(", ") || "",
-        category: project.category || "web",
+        category: getCanonicalProjectCategory(project.category),
         featured: project.featured || false,
         links: {
           github: project.links?.github || "",
@@ -239,13 +243,11 @@ const ProjectForm = ({ project, onClose, onSuccess }) => {
           }
           className="input"
         >
-          <option value="web">Web</option>
-          <option value="mobile application">Mobile Application</option>
-          <option value="scientific visualization">Scientific Visualization</option>
-          <option value="web application">Web Application</option>
-          <option value="fullstack">Full Stack</option>
-          <option value="ai/ml">AI/ML</option>
-          <option value="other">Other</option>
+          {PROJECT_CATEGORY_OPTIONS.map((category) => (
+            <option key={category.value} value={category.value}>
+              {category.label}
+            </option>
+          ))}
         </select>
       </div>
 

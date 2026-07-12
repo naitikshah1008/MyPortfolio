@@ -8,6 +8,7 @@ import ProjectForm from "../../components/ProjectForm";
 import ConfirmDialog from "../../components/ConfirmDialog";
 import { invalidateProjectsCache } from "../../utils/projects";
 import { invalidateHomepageCache } from "../../utils/homepage";
+import { formatProjectCategory } from "../../utils/constants";
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
@@ -133,6 +134,9 @@ const Projects = () => {
                 <h3 className="text-xl font-bold mb-2 font-display">
                   {project.title}
                 </h3>
+                <span className="mb-3 inline-flex rounded-lg bg-primary-100 px-2 py-1 text-xs font-medium text-primary-700 dark:bg-primary-900/30 dark:text-primary-300">
+                  {formatProjectCategory(project.category)}
+                </span>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
                   {project.description}
                 </p>

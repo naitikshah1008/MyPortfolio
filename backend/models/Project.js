@@ -32,8 +32,20 @@ const projectSchema = new mongoose.Schema(
     ],
     category: {
       type: String,
-      enum: ["web", "mobile application", "scientific visualization", "web application", "fullstack", "ai/ml", "other"],
-      default: "web",
+      enum: [
+        "full-stack systems",
+        "web applications",
+        "ai data visualization",
+        "other builds",
+        "web",
+        "mobile application",
+        "scientific visualization",
+        "web application",
+        "fullstack",
+        "ai/ml",
+        "other",
+      ],
+      default: "web applications",
     },
     links: {
       github: {

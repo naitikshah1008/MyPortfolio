@@ -4,12 +4,16 @@ import toast from "react-hot-toast";
 import api from "../utils/api";
 import { invalidateHomepageCache } from "../utils/homepage";
 import { invalidateSkillsCache } from "../utils/skills";
+import {
+  SKILL_CATEGORY_OPTIONS,
+  getCanonicalSkillCategory,
+} from "../utils/constants";
 
 const SkillForm = ({ skill, onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
     name: "",
     level: 50,
-    category: "languages",
+    category: SKILL_CATEGORY_OPTIONS[0].value,
     color: "#3b82f6",
   });
   const [loading, setLoading] = useState(false);
@@ -19,7 +23,7 @@ const SkillForm = ({ skill, onClose, onSuccess }) => {
       setFormData({
         name: skill.name || "",
         level: skill.level || 50,
-        category: skill.category || "languages",
+        category: getCanonicalSkillCategory(skill.category),
         color: skill.color || "#3b82f6",
       });
     }
@@ -94,14 +98,11 @@ const SkillForm = ({ skill, onClose, onSuccess }) => {
           className="input"
           required
         >
-          <option value="languages">Languages</option>
-          <option value="backend">Backend</option>
-          <option value="distributed systems">Distributed Systems</option>
-          <option value="ml/ai">ML/AI</option>
-          <option value="cloud & devops">Cloud & DevOps</option>
-          <option value="tools & infrastructure">Tools & Infrastructure</option>
-          <option value="database">Database</option>
-          <option value="frontend">Frontend</option>
+          {SKILL_CATEGORY_OPTIONS.map((category) => (
+            <option key={category.value} value={category.value}>
+              {category.label}
+            </option>
+          ))}
         </select>
       </div>
 
