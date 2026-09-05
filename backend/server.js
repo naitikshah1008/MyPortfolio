@@ -27,8 +27,7 @@ const app = express();
 const defaultAllowedOrigins = [
   "http://localhost:3001",
   "http://127.0.0.1:3001",
-  "https://my-portfolio-khaki-eight-80.vercel.app",
-  "https://portfolio-mu-three-88.vercel.app",
+  "https://naitik-shah-portfolio.vercel.app",
 ];
 
 const configuredAllowedOrigins = process.env.CLIENT_ORIGINS
